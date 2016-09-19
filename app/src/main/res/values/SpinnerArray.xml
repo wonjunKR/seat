@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="age">
+        <item >0~9</item>
+        <item >10~19</item>
+        <item >20~29</item>
+        <item >30~39</item>
+        <item >40~49</item>
+        <item >50~59</item>
+        <item >60~</item>
+    </string-array>
+
+    <string-array name="job">
+        <item >무직</item>
+        <item >학생</item>
+        <item >사무직</item>
+        <item >운전기사</item>
+        <item >주부</item>
+        <item >운동선수</item>
+        <item >그 외</item>
+    </string-array>
+</resources>
