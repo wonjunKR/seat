@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                                 intent.putExtra("name", object.getString("name"));
                                 intent.putExtra("birthday", object.getString("birthday"));
                                 startActivity(intent);  // 추가 정보를 받는 액티비티로 이동
+                                finish();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -116,9 +117,11 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "MainActivity 저장된 로그인 상태 : " + prefs.getString("isLoggedIn", "false"));
         Log.d(TAG, "MainActivity 저장된 유저넘버 상태 : " + prefs.getString("UserNumber", "값이 존재하지 않음"));
 
-        if(prefs.getString("isLoggedIn", "false").equals("true")){
+        if(prefs.getString("isLoggedIn", "false").equals("true")){  // 이미 로그인이 되어있는 경우 아래는 스킵
             Log.d(TAG, "로그인이 되어있음.");
-            // 이 다음 메인으로 넘어가는거 짜기
+
+            startActivity(new Intent(getApplicationContext(), FourButtonsActivity.class));  // 다음으로 이동
+            finish();
         }
 
         buttonLogin = (Button)findViewById(R.id.buttonLogin);
@@ -145,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "로그인 버튼이 눌림");
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
             }
         });
 
@@ -153,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "회원가입 버튼이 눌림");
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                finish();
             }
         });
     }

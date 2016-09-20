@@ -28,6 +28,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="비번"
+            android:inputType="textPassword"
             />
         <EditText
             android:id="@+id/editTextPasswordCheck"
@@ -35,6 +36,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="비번체크"
+            android:inputType="textPassword"
             />
         <EditText
             android:id="@+id/editTextName"

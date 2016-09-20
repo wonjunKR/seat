@@ -30,4 +30,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.2.0' // http 요청
     compile 'com.facebook.android:facebook-android-sdk:4.+' // 페북 연동
+    compile 'com.android.support:design:24.0.0' // 하단메뉴바 위해 추가
+    compile 'com.roughike:bottom-bar:1.2.1' // 하단메뉴바 위해 추가
+    compile 'com.github.PhilJay:MPAndroidChart:v2.1.6' // 그래프 위해서 추가
 }

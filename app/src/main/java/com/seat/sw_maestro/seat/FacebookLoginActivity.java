@@ -80,7 +80,9 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 editor.commit();
 
                 Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
-                // 이제 다음으로 넘어가야겠지
+
+                startActivity(new Intent(getApplicationContext(), FourButtonsActivity.class));  // 다음으로 이동
+                finish();
             }
         });
     }

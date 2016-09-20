@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -127,7 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                     editor.putString("UserNumber", result); // UserNumber 세팅
                     editor.commit();
 
-                    // 이 다음부터 메인으로 넘어가기 하장
+                    startActivity(new Intent(getApplicationContext(), FourButtonsActivity.class));  // 다음으로 이동
+                    finish();
                 }
             }
         });
