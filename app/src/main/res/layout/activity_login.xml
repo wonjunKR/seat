@@ -19,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:hint="ID"
             />
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:hint="Password"
             />
         <Button
             android:id="@+id/buttonLogin"

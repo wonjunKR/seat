@@ -8,41 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:textSize="30dp"
-        android:text="회원가입 새로운 회원..쏼라쏼라"/>
+        android:text="정보를 추가적으로 입력해주세요.."/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:orientation="vertical"
-        android:weightSum="8">
-        <EditText
-            android:id="@+id/editTextID"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="아이디"
-            />
-        <EditText
-            android:id="@+id/editTextPassword"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="비번"
-            />
-        <EditText
-            android:id="@+id/editTextPasswordCheck"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="비번체크"
-            />
-        <EditText
-            android:id="@+id/editTextName"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:hint="이름"
-            />
+        android:weightSum="3">
         <EditText
             android:id="@+id/editTextWeight"
             android:layout_width="match_parent"
@@ -57,11 +29,6 @@
             android:layout_weight="1"
             android:hint="키"
             />
-        <Spinner
-            android:id="@+id/spinnerAge"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
         <Spinner
             android:id="@+id/spinnerJob"
             android:layout_width="match_parent"

@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
 
         <!-- 페북 -->
         <activity
@@ -36,6 +36,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <!-- 페북 끝 -->
+        <activity android:name=".FacebookLoginActivity"></activity>
     </application>
 
 </manifest>

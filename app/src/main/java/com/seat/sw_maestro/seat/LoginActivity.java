@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -68,6 +69,15 @@ public class LoginActivity extends AppCompatActivity {
 
                         if(password.equals(decoded_password)){  // 로그인 성공
                             Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+
+                            // 로그인 정보를 저장하기 위한 sharedPreferences
+                            SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+
+                            editor.putString("isLoggedIn", "true"); // 로그인 상태 true로
+                            editor.putString("UserNumber", jsonObject.getString("UserNumber")); // UserNumber 세팅
+                            editor.commit();
+
                             // 여기서부터 다음으로 넘어가는 것 하기!!!
                         }
                         else{   // 로그인 실패

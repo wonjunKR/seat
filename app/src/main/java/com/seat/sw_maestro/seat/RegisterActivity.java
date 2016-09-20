@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -19,6 +20,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editTextPassword;
     EditText editTextPasswordCheck;
     EditText editTextName;
+    EditText editTextWeight;
+    EditText editTextHeight;
     Spinner spinnerAge;
     Spinner spinnerJob;
     Button buttonRegister;
@@ -43,6 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
         editTextPasswordCheck = (EditText)findViewById(R.id.editTextPasswordCheck);
         editTextName = (EditText)findViewById(R.id.editTextName);
+        editTextWeight = (EditText)findViewById(R.id.editTextWeight);
+        editTextHeight = (EditText)findViewById(R.id.editTextHeight);
         buttonRegister = (Button)findViewById(R.id.buttonRegister);
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +58,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String password = editTextPassword.getText().toString();
                 String passwordCheck = editTextPasswordCheck.getText().toString();
                 String name = editTextName.getText().toString();
+                String weight = editTextWeight.getText().toString();
+                String height = editTextHeight.getText().toString();
                 String age = spinnerAge.getSelectedItem().toString();
                 String job = spinnerJob.getSelectedItem().toString();
 
@@ -99,8 +106,8 @@ public class RegisterActivity extends AppCompatActivity {
                     // 2. 유저 정보를 등록하고
                     params[0] = name;   // 이름
                     params[1] = age;    // 나이
-                    params[2] = "61.2"; // 체중
-                    params[3] = "170.5";// 키
+                    params[2] = weight; // 체중
+                    params[3] = height; // 키
                     params[4] = job;    // 직업
                     params[5] = "-1";   // facebook ID
                     result = httpManager.useAPI(1,params);  // 사용자 정보 등록, 결과로 DB에 생성된 UserNumber를 받아온다.
@@ -111,6 +118,14 @@ public class RegisterActivity extends AppCompatActivity {
                     params[1] = result;
                     params[2] = id;
                     httpManager.useAPI(9,params);   // 이거는 방금 등록한 계정에 새로 발급받은 UserNumber를 추가하는 것.
+
+                    // 로그인 정보를 저장하기 위한 sharedPreferences
+                    SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+
+                    editor.putString("isLoggedIn", "true"); // 로그인 상태 true로
+                    editor.putString("UserNumber", result); // UserNumber 세팅
+                    editor.commit();
 
                     // 이 다음부터 메인으로 넘어가기 하장
                 }

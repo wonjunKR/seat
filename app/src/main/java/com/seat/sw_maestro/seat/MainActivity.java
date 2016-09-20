@@ -57,13 +57,17 @@ public class MainActivity extends AppCompatActivity {
                             response.getError();
                             Log.e("JSON:", object.toString());
                             try {
-                                prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
-                                editor = prefs.edit();
 
-                                editor.putString("FacebookID", object.getString("id")); // 페이스북 아이디 세팅
-                                editor.putString("Name", object.getString("name")); // 이름 세팅
-                                editor.putString("Age", object.getString("birthday")); // 생일 세팅
-                                editor.commit();
+                                Log.d(TAG, "페이스북 연동 테스트");
+                                Log.d(TAG,"FacebookID" + " " + object.getString("id"));
+                                Log.d(TAG,"name" + " " + object.getString("name"));
+                                Log.d(TAG,"birthday" + " " + object.getString("birthday"));
+
+                                Intent intent = new Intent(getApplicationContext(), FacebookLoginActivity.class);
+                                intent.putExtra("facebookID", object.getString("id"));
+                                intent.putExtra("name", object.getString("name"));
+                                intent.putExtra("birthday", object.getString("birthday"));
+                                startActivity(intent);  // 추가 정보를 받는 액티비티로 이동
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -76,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
             //Log.e(" About to Graph Call", " ");
             request.executeAsync();
             //Log.e(" Finished Graph Call", " ");
-
-            // 여기에서 그 디비에 넣고 그 작업 시작해.
-            //startActivity(new Intent(LoginActivity.this, LoginActivity2.class));
         }
 
         @Override
@@ -109,6 +110,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); // 페북 연동 위해
         setContentView(R.layout.activity_main);
+
+        // 유저 정보가 등록된 상태인지 확인한다.
+        SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
+        Log.d(TAG, "MainActivity 저장된 로그인 상태 : " + prefs.getString("isLoggedIn", "false"));
+        Log.d(TAG, "MainActivity 저장된 유저넘버 상태 : " + prefs.getString("UserNumber", "값이 존재하지 않음"));
+
+        if(prefs.getString("isLoggedIn", "false").equals("true")){
+            Log.d(TAG, "로그인이 되어있음.");
+            // 이 다음 메인으로 넘어가는거 짜기
+        }
 
         buttonLogin = (Button)findViewById(R.id.buttonLogin);
         buttonRegister = (Button)findViewById(R.id.buttonRegister);
