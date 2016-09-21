@@ -73,7 +73,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
                 // 로그인 정보를 저장하기 위한 sharedPreferences
                 SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
-                SharedPreferences.Editor editor = prefs.edit();
+                SharedPreferences.Editor editor = prefs.edit(); 
 
                 editor.putString("isLoggedIn", "true"); // 로그인 상태 true로
                 editor.putString("UserNumber", result); // UserNumber 세팅
