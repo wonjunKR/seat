@@ -31,5 +31,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.2.0' // http 요청
     compile 'com.facebook.android:facebook-android-sdk:4.+' // 페북 연동
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6' // 그래프 위해서 추가
-    compile 'com.github.rey5137:material:1.2.1'
+    compile 'com.github.rey5137:material:1.2.1' // 옆으로 쓸어넘기기
 }
