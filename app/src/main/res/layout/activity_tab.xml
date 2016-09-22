@@ -17,11 +17,14 @@
             android:layout_width="0dp"
             android:layout_weight="9" />
         <com.rey.material.widget.ImageButton
+            android:id="@+id/buttonSetting"
             android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:background="#FFFFFF"
-            android:src="@drawable/down_arrow"/>
+            android:background="#FFFFFFFF"
+            android:src="@drawable/btn_setting"
+            android:padding="10dp"
+            android:scaleType="fitXY"/>
     </LinearLayout>
 
     <com.seat.sw_maestro.seat.SlidingTabLayout

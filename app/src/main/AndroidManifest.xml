@@ -38,6 +38,7 @@
             android:value="@string/facebook_app_id" />
         <!-- 페북 끝 -->
         <activity android:name=".FacebookLoginActivity" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>
