@@ -37,12 +37,17 @@ public class RegisterActivity extends AppCompatActivity {
         //스피너 관련
         spinnerAge = (Spinner)findViewById(R.id.spinnerAge);
         spinnerJob = (Spinner)findViewById(R.id.spinnerJob);
+
         //어댑터 생성
-        ArrayAdapter adapterAge = ArrayAdapter.createFromResource(this, R.array.age, android.R.layout.simple_spinner_item);
-        ArrayAdapter adapterJob = ArrayAdapter.createFromResource(this, R.array.job, android.R.layout.simple_spinner_item);
+        //주석된 것은 기본 스피터 리스트 목록인데 안이쁘니까 커스터마이징해서 꾸민다.
+        //ArrayAdapter adapterAge = ArrayAdapter.createFromResource(this, R.array.age, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapterAge = ArrayAdapter.createFromResource(this, R.array.age, R.layout.spinner_layout);
+        ArrayAdapter adapterJob = ArrayAdapter.createFromResource(this, R.array.job, R.layout.spinner_layout);
+
         //스피너와 어댑터 연결
         spinnerAge.setAdapter(adapterAge);
         spinnerJob.setAdapter(adapterJob);
+
         editTextID = (EditText)findViewById(R.id.editTextID);
         editTextPassword = (EditText)findViewById(R.id.editTextPassword);
         editTextPasswordCheck = (EditText)findViewById(R.id.editTextPasswordCheck);

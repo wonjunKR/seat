@@ -40,6 +40,7 @@
             android:layout_weight="1"
             android:background="@drawable/square_border"
             android:textColor="#ffffffff"
+            android:textStyle="bold"
             android:text ="로그인"
             android:layout_margin="3dp"/>
         <Button
@@ -49,6 +50,7 @@
             android:layout_weight="1"
             android:background="#ffffff"
             android:textColor="#00bfa5"
+            android:textStyle="bold"
             android:text ="회원가입"
             android:layout_margin="3dp"/>
         <com.facebook.login.widget.LoginButton

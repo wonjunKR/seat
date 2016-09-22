@@ -3,43 +3,104 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background_main">
+    android:weightSum="15"
+    android:background="#00bfa5">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:textSize="30dp"
-        android:text="정보를 추가적으로 입력해주세요.."/>
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:paddingLeft="30dp"
+        android:text="추가정보 입력"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textSize="15dp"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="30dp"
+        android:text="Facebook으로 Seat를 시작합니다."/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:padding="15dp">
         <EditText
             android:id="@+id/editTextWeight"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="체중"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8DD9C8"
+            android:hint="체중(kg)"
+            android:background="@drawable/square_border"
+            android:layout_margin="3dp"
+            android:paddingLeft="20dp"
             />
         <EditText
             android:id="@+id/editTextHeight"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="키"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#8DD9C8"
+            android:hint="키(cm)"
+            android:background="@drawable/square_border"
+            android:layout_margin="3dp"
+            android:paddingLeft="20dp"
             />
-        <Spinner
-            android:id="@+id/spinnerJob"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:background="@drawable/square_border"
+            android:orientation="horizontal">
+            <Spinner
+                android:id="@+id/spinnerJob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:layout_marginLeft="5dp"
+                android:spinnerMode="dropdown" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/down_arrow"/>
+        </RelativeLayout>
     </LinearLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5.5"/>
     <Button
         android:id="@+id/buttonRegister"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="register"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFFFF"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textColor="#00bfa5"
+        android:textStyle="bold"
+        android:text="이 정보로 가입하기"/>/>
 </LinearLayout>
 

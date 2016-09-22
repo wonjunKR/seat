@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class FacebookLoginActivity extends AppCompatActivity {
 
@@ -31,7 +30,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
         //스피너 관련
         spinnerJob = (Spinner)findViewById(R.id.spinnerJob);
         //어댑터 생성
-        ArrayAdapter adapterJob = ArrayAdapter.createFromResource(this, R.array.job, android.R.layout.simple_spinner_item);
+        ArrayAdapter adapterJob = ArrayAdapter.createFromResource(this, R.array.job, R.layout.spinner_layout);
         //스피너와 어댑터 연결
         spinnerJob.setAdapter(adapterJob);
 
@@ -79,7 +78,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 editor.putString("UserNumber", result); // UserNumber 세팅
                 editor.commit();
 
-                Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
                 finish();

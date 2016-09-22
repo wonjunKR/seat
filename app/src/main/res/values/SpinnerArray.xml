@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="age">
-        <item >0~9</item>
-        <item >10~19</item>
-        <item >20~29</item>
-        <item >30~39</item>
-        <item >40~49</item>
-        <item >50~59</item>
-        <item >60~</item>
+        <item >나이 선택</item>
+        <item >20세 미만</item>
+        <item >20대</item>
+        <item >30대</item>
+        <item >40대</item>
+        <item >50대</item>
+        <item >60세 이상</item>
     </string-array>
 
     <string-array name="job">
-        <item >무직</item>
+        <item >직업 선택</item>
         <item >학생</item>
         <item >사무직</item>
         <item >운전기사</item>
