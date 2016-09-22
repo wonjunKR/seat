@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "계정조회 결과 : " + result);   // 이미 입력한 아이디 있으면 계정정보 리턴, 없으면 -1
 
                 if (result.equals("-1")) {   // 아이디 없음.
-                    Toast.makeText(getApplicationContext(), "Check ID!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "아이디 혹은 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();
                 } else {    // 그게 아니면 비밀번호 체크하겠지
                     try {
                         JSONArray jsonArray = new JSONArray(result);    // 서버로부터 json 배열 받고
@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "복호화 : " + decoded_password);
 
                         if(password.equals(decoded_password)){  // 로그인 성공
-                            Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                             // 로그인 정보를 저장하기 위한 sharedPreferences
                             SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                             finish();
                         }
                         else{   // 로그인 실패
-                            Toast.makeText(getApplicationContext(), "Check Password!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "아이디 혹은 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

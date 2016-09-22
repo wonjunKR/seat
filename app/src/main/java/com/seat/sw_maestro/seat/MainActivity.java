@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -44,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
         @Override
         public void onSuccess(LoginResult loginResult) {    // 페북 로그인 성공시
-            Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Login Success!", Toast.LENGTH_LONG).show();
 
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
@@ -85,12 +84,12 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onCancel() {
-            Toast.makeText(getApplicationContext(), "User sign in canceled!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "User sign in canceled!", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException e) {
-            Toast.makeText(getApplicationContext(), "Something is wrong!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "Something is wrong!", Toast.LENGTH_LONG).show();
         }
     };
 

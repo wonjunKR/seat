@@ -2,39 +2,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="10"
+    android:background="@drawable/background_main">
 
-    <ImageView
-        android:layout_marginTop="100dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/title_login"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:weightSum="10">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="6"
+            android:src="@drawable/title"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:weightSum="3"
+        android:padding="15dp">
         <EditText
             android:id="@+id/editTextID"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="ID"
+            android:background="@drawable/square_border"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:hint="아이디 입력"
+            android:layout_margin="8dp"
+            android:padding="20dp"
             />
         <EditText
             android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:hint="Password"
+            android:hint="비밀번호 입력"
             android:inputType="textPassword"
+            android:background="@drawable/square_border"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF"
+            android:layout_margin="8dp"
+            android:padding="20dp"
             />
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:text ="로그인"/>
+            android:background="#FFFFFFFF"
+            android:text ="로그인"
+            android:layout_margin="8dp"
+            android:textColor="#00bfa5"/>
     </LinearLayout>
 </LinearLayout>
 
