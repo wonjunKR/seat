@@ -24,14 +24,14 @@ public class TabActivity extends AppCompatActivity {
         pager.setAdapter(adapter);
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-        /* 이거 쓰면 죽더라
+
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return getResources().getColor(R.color.tabsScrollColor);
+                return getResources().getColor(R.color.tabsScrollColor);    // 눌렀을 때 아래에 작게 보이는 색
             }
         });
-        */
+
         tabs.setViewPager(pager);
     }
 

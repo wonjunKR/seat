@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="15"
-    android:background="#00bfa5">
+    android:background="@color/mainColor">
 
     <Space
         android:layout_width="match_parent"
@@ -172,7 +172,7 @@
         android:background="#FFFFFFFF"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:textColor="#00bfa5"
+        android:textColor="@color/mainColor"
         android:textStyle="bold"
         android:text="이 정보로 가입하기"/>
 </LinearLayout>

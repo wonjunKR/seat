@@ -68,7 +68,7 @@
             android:layout_margin="8dp"
             android:text ="로그인"
             android:textStyle="bold"
-            android:textColor="#00bfa5"/>
+            android:textColor="@color/mainColor"/>
     </LinearLayout>
 </LinearLayout>
 

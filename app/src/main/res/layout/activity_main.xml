@@ -49,7 +49,7 @@
             android:layout_height="40dp"
             android:layout_weight="1"
             android:background="#ffffff"
-            android:textColor="#00bfa5"
+            android:textColor="@color/mainColor"
             android:textStyle="bold"
             android:text ="회원가입"
             android:layout_margin="3dp"/>
