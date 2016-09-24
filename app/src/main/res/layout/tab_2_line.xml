@@ -13,8 +13,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
+            android:paddingLeft="15dp"
             android:text="앉은 시간"
-            android:textSize="15pt"/>
+            android:textStyle="bold"
+            android:textSize="15pt"
+            android:textColor="@color/mainColor"/>
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart_time"
             android:layout_width="match_parent"
@@ -24,8 +27,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
+            android:paddingLeft="15dp"
             android:text="정확도"
-            android:textSize="15pt"/>
+            android:textStyle="bold"
+            android:textSize="15pt"
+            android:textColor="@color/mainColor"/>
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart_accuracy"
             android:layout_width="match_parent"
