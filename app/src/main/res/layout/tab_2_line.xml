@@ -9,15 +9,31 @@
         android:layout_height="match_parent"
         android:weightSum="5"
         android:orientation="vertical">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"
-            android:paddingLeft="15dp"
-            android:text="앉은 시간"
-            android:textStyle="bold"
-            android:textSize="15pt"
-            android:textColor="@color/mainColor"/>
+            android:orientation="horizontal"
+            android:weightSum="10">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:paddingLeft="15dp"
+                android:text="앉은 시간"
+                android:textStyle="bold"
+                android:textSize="15pt" />
+            <Spinner
+                android:id="@+id/spinnerGraphInterval"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart_time"
             android:layout_width="match_parent"
@@ -30,8 +46,7 @@
             android:paddingLeft="15dp"
             android:text="정확도"
             android:textStyle="bold"
-            android:textSize="15pt"
-            android:textColor="@color/mainColor"/>
+            android:textSize="15pt" />
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/lineChart_accuracy"
             android:layout_width="match_parent"
