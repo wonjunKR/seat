@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity {
     Button buttonLogin;
     Button buttonRegister;
 
-    // 로그인 사용자 정보를 저장하기 위한 SharedPreferences
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
     // 페이스북 연동과 관련
     private CallbackManager callbackManager = null;
     private AccessTokenTracker accessTokenTracker = null;
