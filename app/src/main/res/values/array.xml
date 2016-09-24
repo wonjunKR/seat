@@ -19,4 +19,14 @@
         <item >운동선수</item>
         <item >그 외</item>
     </string-array>
+
+    <string-array name="graphList">
+        <item>꺾은선 그래프</item>
+        <item>막대 그래프</item>
+    </string-array>
+    <string-array name="graphList_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

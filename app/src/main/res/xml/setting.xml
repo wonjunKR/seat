@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="그래프" >
+        <ListPreference
+            android:key="prefGraphList"
+            android:entries="@array/graphList"
+            android:summary="대시보드에서 보여질 그래프의 표현 방식을 변경합니다."
+            android:entryValues="@array/graphList_values"
+            android:title="그래프 표현 방식 변경"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_update_setting">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefSendReport"
+            android:summary="@string/pref_send_report_summary"
+            android:title="@string/pref_send_report" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

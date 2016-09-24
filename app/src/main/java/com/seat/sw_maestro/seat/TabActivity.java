@@ -24,6 +24,7 @@ public class TabActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         adapter =  new ViewPagerAdapter(getSupportFragmentManager(),Titles,numberOfTabs);
@@ -41,8 +42,7 @@ public class TabActivity extends AppCompatActivity {
         tabs.setViewPager(pager);
         // 요 위까지는 텝메뉴와 관련됨.
 
-        buttonSetting = (ImageButton)findViewById(R.id.buttonSetting);
-
+        buttonSetting = (ImageButton)findViewById(R.id.buttonSetting);  // 세팅하기로 가는 버튼
         buttonSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,5 +51,4 @@ public class TabActivity extends AppCompatActivity {
             }
         });
     }
-
 }

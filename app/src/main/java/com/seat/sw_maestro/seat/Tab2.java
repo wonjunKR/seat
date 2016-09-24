@@ -3,6 +3,7 @@ package com.seat.sw_maestro.seat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,9 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 
 public class Tab2 extends Fragment {
+
+    private static final String TAG = "Tab2";
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_2,container,false);
@@ -28,7 +32,6 @@ public class Tab2 extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        System.out.println("onActivityCreated 호출2");
         LineChart lineChart;
         BarChart barChart;
         lineChart = (LineChart) getView().findViewById(R.id.linechart1);
@@ -88,5 +91,12 @@ public class Tab2 extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         // 뷰에 데이터를 넣는 작업 등을 할 추가할 수 있음
+    }
+
+    @Override
+    public void onStart() {
+        Log.d(TAG, "onStart()");
+        // 이때 세팅 이후 그래프의 모양과 관련된 것을 바꾸면 되겠지?
+        super.onStart();
     }
 }
