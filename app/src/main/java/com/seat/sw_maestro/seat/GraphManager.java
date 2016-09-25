@@ -1,12 +1,14 @@
 package com.seat.sw_maestro.seat;
 
+import android.content.Context;
+
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.util.ArrayList;
 
 public class GraphManager {
@@ -40,12 +42,12 @@ public class GraphManager {
     /*
     위의 두 과정(데이터와 라벨을 만드는 것)을 바탕으로 이후에 최종 데이터 셋을 만드는 함수(라인차트용)/ 인자는 데이터, 인덱스, 라벨, 표 아래에 보이는 글씨..
      */
-    public LineData makeLineData(float[] datas, int[] index, String[] labels, String description){
+    public LineData makeLineData(float[] datas, int[] index, String[] labels, String description, Context context){
         ArrayList<Entry> lineChart_entries = makeLineChartEntry(datas,index);
         ArrayList<String> lineChart_labels = makeChartLabel(labels);
         LineDataSet lineChart_dataSet = new LineDataSet(lineChart_entries, description);    // description -> 표 아래에 보이는 글씨
         LineData lineChart_data = new LineData(lineChart_labels, lineChart_dataSet);
-        lineChart_dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        lineChart_dataSet.setColors(new int[] {context.getResources().getColor(R.color.mainColor)});    // 색상
         lineChart_dataSet.setDrawFilled(true);
 
         return lineChart_data;
@@ -65,12 +67,13 @@ public class GraphManager {
     /*
     위의 두 과정(데이터와 라벨을 만드는 것)을 바탕으로 이후에 최종 데이터 셋을 만드는 함수(바차트용)/ 인자는 데이터, 인덱스, 라벨, 표 아래에 보이는 글씨..
      */
-    public BarData makeBarData(float[] datas, int[] index, String[] labels, String description){
+    public BarData makeBarData(float[] datas, int[] index, String[] labels, String description, Context context){
         ArrayList<BarEntry> barChart_entries = makeBarChartEntry(datas,index);
         ArrayList<String> barChart_labels = makeChartLabel(labels);
         BarDataSet barChart_dataSet = new BarDataSet(barChart_entries, description);    // description -> 표 아래에 보이는 글씨
+        barChart_dataSet.setColors(new int[] {context.getResources().getColor(R.color.mainColor)}); // 막대 그래프 색상
         BarData barChart_data = new BarData(barChart_labels, barChart_dataSet);
-        barChart_dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+
 
         return barChart_data;
     }
