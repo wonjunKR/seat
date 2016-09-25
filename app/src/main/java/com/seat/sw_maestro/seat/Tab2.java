@@ -50,7 +50,7 @@ public class Tab2 extends Fragment {
 
         //스피너 관련
         spinnerGraphInterval = (Spinner)this.getActivity().findViewById(R.id.spinnerGraphInterval);
-        ArrayAdapter adapterGraphInterval = ArrayAdapter.createFromResource(this.getActivity(), R.array.graphInterval, R.layout.spinner_layout);
+        ArrayAdapter adapterGraphInterval = ArrayAdapter.createFromResource(this.getActivity(), R.array.graphInterval, R.layout.spinner_layout2);
         spinnerGraphInterval.setAdapter(adapterGraphInterval);
         spinnerGraphInterval.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

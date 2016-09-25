@@ -7,6 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SettingActivity extends PreferenceActivity {
 
@@ -17,6 +18,8 @@ public class SettingActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.setting);
         Log.d(TAG, "SettingActivity");
+
+        Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 
         ListPreference listPreference = (ListPreference) findPreference("prefGraphList");   // 그래프 관련
         setOnPreferenceChange(listPreference);  // 값이 바뀌면.. 리스너 등록
