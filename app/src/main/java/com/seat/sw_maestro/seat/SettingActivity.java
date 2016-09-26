@@ -26,11 +26,17 @@ public class SettingActivity extends PreferenceActivity {
         //databaseManager.insertData(timeLine,53,78,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
 
         // 임시 데이터
-        databaseManager.insertData("0",1,78,"20160926");
-        databaseManager.insertData("1",2,75,"20160913");
-        databaseManager.insertData("2",3,88,"20160912");
-        databaseManager.insertData("3",4,78,"20160915");
-        databaseManager.insertData("23",5,78,"20160926");
+        databaseManager.insertData("0",13,78,"20160925");
+        databaseManager.insertData("1",12,76,"20160925");
+        databaseManager.insertData("2",18,86,"20160925");
+        databaseManager.insertData("3",19,58,"20160925");
+        databaseManager.insertData("4",13,47,"20160925");
+        databaseManager.insertData("5",51,75,"20160925");
+
+        databaseManager.insertData("1",23,82,"20160926");
+        databaseManager.insertData("2",35,78,"20160926");
+        databaseManager.insertData("3",45,78,"20160926");
+        databaseManager.insertData("23",55,78,"20160926");
         //databaseManager.selectData();   // 조회
         //Log.d(TAG,"sittingTime : " + databaseManager.getSittingTime("15","20160925"));
         //Log.d(TAG,"accuracy : " + databaseManager.getAccuracy("15","20160925"));

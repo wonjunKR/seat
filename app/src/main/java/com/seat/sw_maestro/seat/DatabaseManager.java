@@ -92,6 +92,8 @@ public class DatabaseManager {
             Log.d(TAG, "Accuracy : " + cursor.getInt(cursor.getColumnIndex("Accuracy")));
             Log.d(TAG, "Date : " + cursor.getString(cursor.getColumnIndex("Date")));
         }
+
+        cursor.close();
     }
 
     public String getCurrentTime(){
@@ -163,6 +165,7 @@ public class DatabaseManager {
         return accuracy;
     }
 
+    /* 속도가 많이 느린 버전... 비효율적임 일 계산을 하나씩 가져와서 하니까 .. 이거 쓰지 말것. 디비에서 계산해서 가져오는 아래가 더 빠름
     public int getSittingTime_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안 앉았던 sittingTime을 더해서 리턴해준다.
         int sittingTime_OneDay = 0;
         for(int i = 0; i<24; i++){  // 타임라인은 0부터 23까지 존재하니까 0~23까지 루프를 돌면 되겠음.
@@ -177,7 +180,27 @@ public class DatabaseManager {
         }
         return sittingTime_OneDay;
     }
+    */
 
+    public int getSittingTime_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안 앉았던 sittingTime을 더해서 리턴해준다.
+        int sittingTime_OneDay = 0;
+
+        String sql = "select sum(SittingTime) AS 'sumOfSittingTime' from " + tableName + " where Date = " + date + ";";
+        Cursor result = db.rawQuery(sql, null);
+
+        if(result.moveToFirst()){
+            sittingTime_OneDay = result.getInt(0);
+        }
+        else{
+            //Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
+            sittingTime_OneDay = 0;
+        }
+        result.close();
+
+        return sittingTime_OneDay;
+    }
+
+    /* 이것도 옛날 버전 쓰지말자.
     public int getAccuracy_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안의 Accuracy를 더해서 리턴해준다.
         int accuracy_OneDay = 0;
         for(int i = 0; i<24; i++){  // 타임라인은 0부터 23까지 존재하니까 0~23까지 루프를 돌면 되겠음.
@@ -191,6 +214,37 @@ public class DatabaseManager {
             accuracy_OneDay += getAccuracy(numberToString,date); // date 날짜 동안의 타임라인에 해당하는 accuracy 값을 다 더하면 하루의 값이 됨
         }
         return accuracy_OneDay;
+    }
+    */
+
+    public int getAccuracy_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안 앉았던 sittingTime을 더해서 리턴해준다.
+        // 정확도의 경우에는 앉은 시간과는 다르게 평균을 내야한다. 그래서 가져온 더한 값을 나눠줘야겠지?
+        int accuracy_OneDay = 0;
+        int count = 1;
+
+        String sql_sum = "select sum(Accuracy) AS 'sumOfAccuracy' from " + tableName + " where Date = " + date + ";";
+        String sql_count = "SELECT count(Accuracy) FROM " + tableName + " WHERE Date = " + date + ";";
+        Cursor result_sum = db.rawQuery(sql_sum, null);
+        Cursor result_count = db.rawQuery(sql_count, null);
+
+        if(result_sum.moveToFirst()){
+            accuracy_OneDay = result_sum.getInt(0);
+        }
+        else{
+            accuracy_OneDay = 0;
+        }
+
+        if(result_count.moveToFirst()){
+            count = result_count.getInt(0);
+            if(count == 0)  // 개수가 없는 경우에 한에서는 1로 나누기로 한다. 어짜피 분모가 0이니까 0이 나오겠지만.. 0으로 나누는 오류를 제거하기 위해
+                count = 1;
+            //Log.d(TAG, "카운트 값 : " + count);
+        }
+
+        result_sum.close();
+        result_count.close();
+
+        return accuracy_OneDay/count;
     }
 
     public float[] makeTimeDatas_OneDay(String date){ // 그래프에 보여줄 하루 동안의 데이터들 (통계기간 일 선택했을 때)
@@ -225,14 +279,14 @@ public class DatabaseManager {
         return accuracyDatas;
     }
 
-    public float[] makeTimeDatas_Month(){ // 그래프에 보여줄 최근 1달 동안의 데이터들 (통계기간 월 선택했을 때)
+    public float[] makeTimeDatas_Month(){ // 그래프에 보여줄 이번 1달 동안의 데이터들 (통계기간 월 선택했을 때)
         float[] timeDatas = new float[31];
         // 31일 동안... getSittingTime_OneDay(date)를 사용해야겠지??
         // 그러기 위해서는 현재 월을 받아와서 yyyymm01 ~ yyyymm31까지 for문을 돌려서 넣어.
+        String year = getCurrentYear();
+        String month = getCurrentMonth();
+        String day;
         for(int i = 1; i <= 31; i++){
-            String year = getCurrentYear();
-            String month = getCurrentMonth();
-            String day;
             if(i<10){
                 day = String.format ("%01d", i);    // 10 이하의 경우
             }
@@ -246,14 +300,14 @@ public class DatabaseManager {
         return timeDatas;
     }
 
-    public float[] makeAccuracyDatas_Month(){ // 그래프에 보여줄 최근 1달 동안의 데이터들 (통계기간 월 선택했을 때)
+    public float[] makeAccuracyDatas_Month(){ // 그래프에 보여줄 이번 달 1달 동안의 데이터들 (통계기간 월 선택했을 때)
         float[] accuracyDatas = new float[31];
         // 31일 동안... getAccuracy_OneDay(date)를 사용해야겠지??
         // 그러기 위해서는 현재 월을 받아와서 yyyymm01 ~ yyyymm31까지 for문을 돌려서 넣어.
+        String year = getCurrentYear();
+        String month = getCurrentMonth();
+        String day;
         for(int i = 1; i <= 31; i++){
-            String year = getCurrentYear();
-            String month = getCurrentMonth();
-            String day;
             if(i<10){
                 day = String.format ("%01d", i);    // 10 이하의 경우
             }
