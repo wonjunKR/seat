@@ -28,6 +28,7 @@ public class Tab2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SharedPreferences prefs = this.getActivity().getSharedPreferences("SettingStatus", Context.MODE_PRIVATE);
         graphType = prefs.getString("prefGraphList","0");   // 그래프의 표현 방식 / 0 - 꺾은선 그래프 / 1 - 막대 그래프 / 디폴트는 꺾은선 그래프로 표시
+        if(graphType.equals("")) graphType = "0";   // 이거는 세팅에 들어가서 아무것도 선택하지 않으면 ""이 들어가게 된다. 그럼 그래프가 제대로 안그려지더라. 아래 케이스 문에서
         Log.d(TAG, "그래프 표현 방식 : " + graphType);
 
         View v;
@@ -70,6 +71,7 @@ public class Tab2 extends Fragment {
 
                 switch(graphInterval){
                     case "일":
+
                         // 라벨 데이터 만들기
                         labels = new String[] {"0시", "", "", "3시", "", "", "6시", "", "", "9시", "",
                                 "","12시","","","15시","","","18시","","","21시","",""};

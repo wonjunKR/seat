@@ -18,7 +18,11 @@ import java.util.Date;
  databaseManager.selectData();   // 조회
  */
 
-//DB를 총괄관리
+// 이 클래스는 DB를 총괄관리
+// 디비에 데이터를 주고 받고
+// 디비에 저장된 데이터를 조합해서 그래프에 뿌려줄 값들을 만들어준다. MakeTimeDatas, MakeAccuracyDatas
+
+
 public class DatabaseManager {
 
     private static final String TAG = "DatabaseManager";
@@ -127,6 +131,7 @@ public class DatabaseManager {
     }
 
     public int getSittingTime(String timeLine, String date){    // timeLine과 date에 해당하는 SittingTime을 리턴함.
+        // 여기가 문제구먼
         String sql = "select SittingTime from " + tableName + " where TimeLine = " + timeLine + " AND Date = " + date + ";";
         Cursor result = db.rawQuery(sql, null);
         int sittingTime;
@@ -139,7 +144,7 @@ public class DatabaseManager {
             //}
         }
         else{
-            Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
+            //Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
             sittingTime = 0;
         }
         result.close();
@@ -157,7 +162,7 @@ public class DatabaseManager {
             accuracy = result.getInt(0);
         }
         else{
-            Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
+            //Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
             accuracy = 0;
         }
         result.close();
@@ -182,7 +187,7 @@ public class DatabaseManager {
     }
     */
 
-    public int getSittingTime_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안 앉았던 sittingTime을 더해서 리턴해준다.
+    public int getSittingTime_OneDay(String date){  // 이것은 date를 넣으면 그 하루동안 앉았던 sittingTime을 더해서 리턴해준다. 월 데이터에서 부분 사용
         int sittingTime_OneDay = 0;
 
         String sql = "select sum(SittingTime) AS 'sumOfSittingTime' from " + tableName + " where Date = " + date + ";";
