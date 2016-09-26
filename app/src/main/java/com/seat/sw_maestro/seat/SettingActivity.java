@@ -19,6 +19,24 @@ public class SettingActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.setting);
         Log.d(TAG, "SettingActivity");
 
+        // 테스트용 나중에 지울것
+        DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
+        String date = databaseManager.getCurrentDay();  // 현재의 날짜 예)20160926
+        String timeLine = databaseManager.getCurrentHour(); // 현재의 시간 14:25면 14를 리턴
+        //databaseManager.insertData(timeLine,53,78,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+
+        // 임시 데이터
+        databaseManager.insertData("0",1,78,"20160926");
+        databaseManager.insertData("1",2,75,"20160926");
+        databaseManager.insertData("2",3,88,"20160926");
+        databaseManager.insertData("3",4,78,"20160926");
+        databaseManager.insertData("23",5,78,"20160926");
+        //databaseManager.selectData();   // 조회
+        //Log.d(TAG,"sittingTime : " + databaseManager.getSittingTime("15","20160925"));
+        //Log.d(TAG,"accuracy : " + databaseManager.getAccuracy("15","20160925"));
+        //Log.d(TAG,"sittingTime_OneDay : " + databaseManager.getSittingTime_OneDay("20160925"));
+        //Log.d(TAG,"accuracy_OneDay : " + databaseManager.getAccuracy_OneDay("20160926"));
+
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 
         ListPreference listPreference = (ListPreference) findPreference("prefGraphList");   // 그래프 관련
