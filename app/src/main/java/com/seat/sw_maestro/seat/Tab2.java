@@ -90,9 +90,9 @@ public class Tab2 extends Fragment {
                         // 인덱스
                         index = new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30};
                         // 앉은 시간 데이터
-                        timeDatas = new float[] {-55,60,0,0,24,0,60,53,20,0,-55,60,0,0,24,0,60,53,20,0,-55,60,0,0,24,0,60,53,20,0,2};
+                        timeDatas = databaseManager.makeTimeDatas_Month();
                         // 정확도 데이터
-                        accuracyDatas = new float[] {67,77,0,0,87,0,78,86,86,67,77,0,0,87,0,78,86,86,67,77,0,0,87,0,78,86,86,1,56,75,84};
+                        accuracyDatas = databaseManager.makeAccuracyDatas_Month();
                         break;
 
                     case "연":

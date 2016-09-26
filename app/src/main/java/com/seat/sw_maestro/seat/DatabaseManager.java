@@ -106,6 +106,18 @@ public class DatabaseManager {
         return hour;
     }
 
+    public String getCurrentYear(){
+        String year = new SimpleDateFormat("yyyy").format(new Date(System.currentTimeMillis()));
+        Log.d(TAG, "현재 연 : " +  year);
+        return year;
+    }
+
+    public String getCurrentMonth(){
+        String month = new SimpleDateFormat("MM").format(new Date(System.currentTimeMillis()));
+        Log.d(TAG, "현재 월 : " +  month);
+        return month;
+    }
+
     public String getCurrentDay(){
         String day = new SimpleDateFormat("yyyyMMdd").format(new Date(System.currentTimeMillis()));
         //Log.d(TAG, "현재날짜 : " +  day);
@@ -209,6 +221,48 @@ public class DatabaseManager {
             }
 
             accuracyDatas[i] = getAccuracy(numberToString,date); // 함수 리턴은 int형이지만 크게 상관 없을듯..
+        }
+        return accuracyDatas;
+    }
+
+    public float[] makeTimeDatas_Month(){ // 그래프에 보여줄 최근 1달 동안의 데이터들 (통계기간 월 선택했을 때)
+        float[] timeDatas = new float[31];
+        // 31일 동안... getSittingTime_OneDay(date)를 사용해야겠지??
+        // 그러기 위해서는 현재 월을 받아와서 yyyymm01 ~ yyyymm31까지 for문을 돌려서 넣어.
+        for(int i = 1; i <= 31; i++){
+            String year = getCurrentYear();
+            String month = getCurrentMonth();
+            String day;
+            if(i<10){
+                day = String.format ("%01d", i);    // 10 이하의 경우
+            }
+            else{
+                day = String.format ("%02d", i);    // 이상의 경우
+            }
+            String date = year + month + day;   // 날짜를 조합했음.
+            int data = getSittingTime_OneDay(date);    // 그 날짜의 하루 데이터를 다 더한다.
+            timeDatas[i-1] = data;
+        }
+        return timeDatas;
+    }
+
+    public float[] makeAccuracyDatas_Month(){ // 그래프에 보여줄 최근 1달 동안의 데이터들 (통계기간 월 선택했을 때)
+        float[] accuracyDatas = new float[31];
+        // 31일 동안... getAccuracy_OneDay(date)를 사용해야겠지??
+        // 그러기 위해서는 현재 월을 받아와서 yyyymm01 ~ yyyymm31까지 for문을 돌려서 넣어.
+        for(int i = 1; i <= 31; i++){
+            String year = getCurrentYear();
+            String month = getCurrentMonth();
+            String day;
+            if(i<10){
+                day = String.format ("%01d", i);    // 10 이하의 경우
+            }
+            else{
+                day = String.format ("%02d", i);    // 이상의 경우
+            }
+            String date = year + month + day;   // 날짜를 조합했음.
+            int data = getAccuracy_OneDay(date);    // 그 날짜의 하루 데이터를 다 더한다.
+            accuracyDatas[i-1] = data;
         }
         return accuracyDatas;
     }

@@ -27,15 +27,17 @@ public class SettingActivity extends PreferenceActivity {
 
         // 임시 데이터
         databaseManager.insertData("0",1,78,"20160926");
-        databaseManager.insertData("1",2,75,"20160926");
-        databaseManager.insertData("2",3,88,"20160926");
-        databaseManager.insertData("3",4,78,"20160926");
+        databaseManager.insertData("1",2,75,"20160913");
+        databaseManager.insertData("2",3,88,"20160912");
+        databaseManager.insertData("3",4,78,"20160915");
         databaseManager.insertData("23",5,78,"20160926");
         //databaseManager.selectData();   // 조회
         //Log.d(TAG,"sittingTime : " + databaseManager.getSittingTime("15","20160925"));
         //Log.d(TAG,"accuracy : " + databaseManager.getAccuracy("15","20160925"));
         //Log.d(TAG,"sittingTime_OneDay : " + databaseManager.getSittingTime_OneDay("20160925"));
         //Log.d(TAG,"accuracy_OneDay : " + databaseManager.getAccuracy_OneDay("20160926"));
+        //databaseManager.getCurrentMonth();
+        //databaseManager.getCurrentYear();
 
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 

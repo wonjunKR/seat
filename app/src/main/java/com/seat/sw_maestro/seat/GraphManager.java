@@ -74,7 +74,6 @@ public class GraphManager {
         barChart_dataSet.setColors(new int[] {context.getResources().getColor(R.color.mainColor)}); // 막대 그래프 색상
         BarData barChart_data = new BarData(barChart_labels, barChart_dataSet);
 
-
         return barChart_data;
     }
 }
