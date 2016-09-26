@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
+    public static Activity RegisterActivity;
 
     EditText editTextID;
     EditText editTextPassword;
@@ -31,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        RegisterActivity = this;
 
         Log.d(TAG, "RegisterActivity");
 

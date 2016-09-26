@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
     Button buttonRegister;
 
     private static final String TAG = "FacebookLoginActivity";
+    public static Activity FacebookLoginActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_facebook_login);
 
         Log.d(TAG, "FacebookLoginActivity");
+        FacebookLoginActivity = this;
 
         //스피너 관련
         spinnerJob = (Spinner)findViewById(R.id.spinnerJob);
@@ -81,7 +84,6 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
                 startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
-                finish();
             }
         });
     }

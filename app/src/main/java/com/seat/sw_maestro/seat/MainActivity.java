@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    public static Activity MainActivity;
 
     Button buttonLogin;
     Button buttonRegister;
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                                 intent.putExtra("name", object.getString("name"));
                                 intent.putExtra("birthday", object.getString("birthday"));
                                 startActivity(intent);  // 추가 정보를 받는 액티비티로 이동
-                                finish();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); // 페북 연동 위해
         setContentView(R.layout.activity_main);
+        MainActivity = this;
 
         // 유저 정보가 등록된 상태인지 확인한다.
         SharedPreferences prefs = getSharedPreferences("UserStatus", MODE_PRIVATE);
@@ -143,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "로그인 버튼이 눌림");
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
             }
         });
 
@@ -152,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "회원가입 버튼이 눌림");
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-                finish();
             }
         });
     }

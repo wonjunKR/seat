@@ -1,5 +1,6 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,16 +19,19 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    public static Activity LoginActivity;
 
     EditText editTextID;
     EditText editTextPassword;
     Button buttonLogin;
     String result;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        LoginActivity = this;
 
         Log.d(TAG, "LoginActivity");
 
@@ -80,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                             editor.commit();
 
                             startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
-                            finish();
                         }
                         else{   // 로그인 실패
                             Toast.makeText(getApplicationContext(), "아이디 혹은 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();
