@@ -10,18 +10,46 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /*
-이렇게 사용한다.
- DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
- String date = databaseManager.getCurrentDay();  // 현재의 날짜 예)20160926
- String timeLine = databaseManager.getCurrentHour(); // 현재의 시간 14:25면 14를 리턴
- databaseManager.insertData(timeLine,53,78,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
- databaseManager.selectData();   // 조회
- */
 
 // 이 클래스는 DB를 총괄관리
 // 디비에 데이터를 주고 받고
 // 디비에 저장된 데이터를 조합해서 그래프에 뿌려줄 값들을 만들어준다. MakeTimeDatas, MakeAccuracyDatas
 
+이렇게 사용한다.
+        // 초기화
+        DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
+
+        // 시간정보얻기
+        databaseMaanger.getCurrentTime(); // 현재의 시각. 타입 - yyyyMMdd HH:mm:ss
+        databaseManager.getCurrentDay();  // 현재의 날짜. 타입 -yyyyMMdd
+        databaseManager.getCurrentHour(); // 현재의 시간. 타입 - HH
+        databaseManager.getCurrentYear(); // 현재의 연도. 타입 - yyyy
+        databaseManager.getCurrentMonth();// 현재의 월. 타입 - MM
+
+        // 데이터 추가하기
+        databaseManager.insertData(timeLine,53,78,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData("0",13,78,"20160927");
+
+        // 데이터 얻기
+        databaseManager.getSittingTime("15","20160925"));   // 2016년 9월 25일의 15~16시에 해당하는 앉은 시간 리턴
+        databaseManager.getAccuracy("15","20160925"));      // 이것은 정확도
+
+        databaseManager.getSittingTime_OneDay("20160925")); // 2016년 9월 25일의 0시~24시까지 않았던 시간을 리턴
+        databaseManager.getAccuracy_OneDay("20160926"));    // 이것은 정확도. 앉은 시간과 다른점은 평균을 계산하여 리턴
+
+        databaseManager.getSittingTime_Month("201609"); // 2016년 9월의 1일~31일 전체 앉았던 시간을 리턴. 인자 타입 yyyyMM에 주의
+        databaseManager.getAccuracy_Month("201609"); // 이것은 정확도. 앉은 시간과 다르게 평균을 계산해서 리턴
+
+        // 그래프에 뿌려줄 데이터 만들기...
+        databaseManager.makeTimeDatas_OneDay(date);         // 통계기간 '일' 선택하면 0~24시간 데이터 배열 리턴. getSittingTime 사용
+        databaseManager.makeAccuracyDatas_OneDay(date);     // 통계기간 '일' 선택하면 0~24시간 데이터 배열 리턴. getAccuracy 사용
+
+        databaseManager.makeTimeDatas_Month();  // 통계기간 '월' 선택하면 1일 ~ 31일 데이터 배열 리턴. getSittingTime_OneDay 사용
+        databaseManager.makeAccuracyDatas_Month();  // 통계기간 '월' 선택하면 1일 ~ 31일 데이터 배열 리턴. getAccuracy_OneDay 사용
+
+        databaseManager.makeTimeDatas_Year(); // 통계기간 '연' 선택하면 1월 ~ 12월 데이터 배열 리턴. getSittingTime_Month 사용
+        databaseManager.makeAccuracyDatas_Year(); // 통계기간 '연' 선택하면 1월 ~ 12월 데이터 배열 리턴. getAccuracy_Month 사용
+ */
 
 public class DatabaseManager {
 
@@ -196,10 +224,6 @@ public class DatabaseManager {
         if(result.moveToFirst()){
             sittingTime_OneDay = result.getInt(0);
         }
-        else{
-            //Log.d(TAG, "데이터가 존재하지 않음. 0을 리턴하겠습니다.");
-            sittingTime_OneDay = 0;
-        }
         result.close();
 
         return sittingTime_OneDay;
@@ -235,9 +259,6 @@ public class DatabaseManager {
         if(result_sum.moveToFirst()){
             accuracy_OneDay = result_sum.getInt(0);
         }
-        else{
-            accuracy_OneDay = 0;
-        }
 
         if(result_count.moveToFirst()){
             count = result_count.getInt(0);
@@ -252,7 +273,7 @@ public class DatabaseManager {
         return accuracy_OneDay/count;
     }
 
-    public float[] makeTimeDatas_OneDay(String date){ // 그래프에 보여줄 하루 동안의 데이터들 (통계기간 일 선택했을 때)
+    public float[] makeTimeDatas_OneDay(String date){ // 그래프에 보여줄 하루 동안의 데이터들 (통계기간 일 선택했을 때) 0~24시 1시간 간격
         float[] timeDatas = new float[24];
         for(int i = 0; i<24; i++){
             String numberToString;
@@ -284,7 +305,7 @@ public class DatabaseManager {
         return accuracyDatas;
     }
 
-    public float[] makeTimeDatas_Month(){ // 그래프에 보여줄 이번 1달 동안의 데이터들 (통계기간 월 선택했을 때)
+    public float[] makeTimeDatas_Month(){ // 그래프에 보여줄 이번 1달 동안의 데이터들 (통계기간 월 선택했을 때) 1일~31일
         float[] timeDatas = new float[31];
         // 31일 동안... getSittingTime_OneDay(date)를 사용해야겠지??
         // 그러기 위해서는 현재 월을 받아와서 yyyymm01 ~ yyyymm31까지 for문을 돌려서 넣어.
@@ -324,5 +345,79 @@ public class DatabaseManager {
             accuracyDatas[i-1] = data;
         }
         return accuracyDatas;
+    }
+
+    public float[] makeTimeDatas_Year(){ // 그래프에 보여줄 1년 동안의 데이터들 (통계기간 연 선택했을 때) 1월~12월
+        float[] timeDatas = new float[12];
+
+        String year = getCurrentYear();
+        String month;
+
+        for(int i = 1; i <= 12; i++){
+            month = String.format ("%02d", i);  // 형식이 yyyymm 이기 떄문에 mm은 항상 두 자리로 해야함.
+            String date = year + month;   // 날짜를 조합했음. 예) 201609  일은 필요없음.
+            int data = getSittingTime_Month(date);    // 그 날짜의 하루 데이터를 다 더한다.
+            timeDatas[i-1] = data;
+        }
+        return timeDatas;
+    }
+
+    public int getSittingTime_Month(String date){   // date를 받음. 형식은(yyyymm) 해당 연, 월의 데이터를 다 더해서 리턴한다.
+        int sittingTime_Month = 0;
+        // Date Like yyyymm% 로 조회하면 뒤에 일에 상관없이 다 값들을 더해오겠지?
+        String sql = "select sum(SittingTime) AS 'sumOfSittingTime' from " + tableName + " where Date Like '" + date + "%'" + ";";
+        //Log.d(TAG, "query : " + sql);
+        Cursor result = db.rawQuery(sql, null);
+
+        if(result.moveToFirst()){
+            sittingTime_Month = result.getInt(0);
+            //Log.d(TAG, "getSittingTime_Month - " + sittingTime_Month);
+        }
+        result.close();
+
+        return sittingTime_Month;
+    }
+
+    public float[] makeAccuracyDatas_Year(){ // 그래프에 보여줄 1년 동안의 데이터들 (통계기간 연 선택했을 때) 1월~12월
+        float[] accuracyDatas = new float[12];
+
+        String year = getCurrentYear();
+        String month;
+
+        for(int i = 1; i <= 12; i++){
+            month = String.format ("%02d", i);  // 형식이 yyyymm 이기 떄문에 mm은 항상 두 자리로 해야함.
+            String date = year + month;   // 날짜를 조합했음. 예) 201609  일은 필요없음.
+            int data = getAccuracy_Month(date);    // 그 날짜의 하루 데이터를 다 더한다.
+            accuracyDatas[i-1] = data;
+        }
+        return accuracyDatas;
+    }
+
+    public int getAccuracy_Month(String date){   // date를 받음. 형식은(yyyymm) 해당 연, 월의 데이터를 다 더해서 리턴한다.
+        int accuracy_Month = 0;
+        int count = 0;
+
+        // Accuracy Like yyyymm% 로 조회하면 뒤에 일에 상관없이 다 값들을 더해오겠지?
+        String sql_sum = "select sum(Accuracy) AS 'sumOfAccuracy' from " + tableName + " where Date Like '" + date + "%'" + ";";
+        String sql_count = "SELECT count(Accuracy) FROM " + tableName + " WHERE Date Like '" + date + "%'" + ";";
+        Cursor result_sum = db.rawQuery(sql_sum, null);
+        Cursor result_count = db.rawQuery(sql_count, null);
+
+        if(result_sum.moveToFirst()){
+            accuracy_Month = result_sum.getInt(0);
+            //Log.d(TAG, "accuracy_Month - " + accuracy_Month);
+        }
+
+        if(result_count.moveToFirst()){
+            count = result_count.getInt(0);
+            if(count == 0)  // 개수가 없는 경우에 한에서는 1로 나누기로 한다. 어짜피 분모가 0이니까 0이 나오겠지만.. 0으로 나누는 오류를 제거하기 위해
+                count = 1;
+            //Log.d(TAG, "카운트 값 : " + count);
+        }
+
+        result_sum.close();
+        result_count.close();
+
+        return accuracy_Month/count;
     }
 }

@@ -104,9 +104,9 @@ public class Tab2 extends Fragment {
                         // 인덱스
                         index = new int[] {0,1,2,3,4,5,6,7,8,9,10,11};
                         // 앉은 시간 데이터
-                        timeDatas = new float[] {-55,60,0,0,24,0,60,53,20,0,0,0};
+                        timeDatas = databaseManager.makeTimeDatas_Year();
                         // 정확도 데이터
-                        accuracyDatas = new float[] {67,77,0,0,87,0,78,86,86,0,0,0,0};
+                        accuracyDatas = databaseManager.makeAccuracyDatas_Year();
                         break;
 
                     default :
