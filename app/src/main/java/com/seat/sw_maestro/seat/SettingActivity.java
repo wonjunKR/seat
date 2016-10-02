@@ -50,26 +50,33 @@ public class SettingActivity extends PreferenceActivity {
         // 블루투스 테스트용 나중에 지워
         bt = new BluetoothSPP(getApplicationContext());
 
-        if(!bt.isBluetoothAvailable()) {    // 블루투스 자체를 지원 안함
+        if(!bt.isBluetoothAvailable()) {    // 블루투스 자체를 지원 안함. 가능성이 거의 없겠지?
             Toast.makeText(getApplicationContext(), "블루투스가 가능한 기기가 아닙니다.", Toast.LENGTH_LONG).show();
         }
         else {  // 블루투스는 됨
-            if (!bt.isBluetoothEnabled()) { // 되지만, 블루투스가 켜져있지 않음
-                Toast.makeText(getApplicationContext(), "블루투스가 꺼져있습니다.", Toast.LENGTH_LONG).show();
-                // 블루투스 키는 인텐트 해야겠지
-                Log.d(TAG, "Bluetooth Enable Request");
+            if (!bt.isBluetoothEnabled()) { // 블루투스가 꺼져있다면.
+                Log.d(TAG, "블루투스 켜달라고 인텐트");
                 Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
-            } else {    // 되면서 켜져있으면...
-                // 블루투스 연결 테스트
-                //Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                //startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-                Log.d(TAG, "블루투스 켜져있었음.");
+            } else {    // 블루투스가 켜져있다면.
+                // 자동연결
                 bt.setupService();
                 bt.startService(BluetoothState.DEVICE_OTHER);
                 setup();
             }
         }
+
+        bt.send("1",true);
+        Log.d(TAG, "값 보낸다 ");
+        bt.send("y",true);
+
+        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+            public void onDataReceived(byte[] data, String message) {
+                // Do something when data incoming
+                Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
+                bt.send("1",true);
+            }
+        });
 
         // 여기까지 블루투스 테스트
 
@@ -106,26 +113,36 @@ public class SettingActivity extends PreferenceActivity {
     }
 
     // 블루투스 테스트
+    // 상태를 나타내는 상태 변수
+    //STATE_NONE = 0; // we're doing nothing
+    //STATE_LISTEN = 1; // now listening for incoming connections
+    //STATE_CONNECTING = 2; // now initiating an outgoing connection
+    //STATE_CONNECTED = 3; // now connected to a remote device
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
             if(resultCode == Activity.RESULT_OK) {
-                bt.connect(data);
                 Log.d(TAG, "켜진 상태에서 기기에 연결");
+                bt.setupService();
+                bt.startService(BluetoothState.DEVICE_OTHER);
+                bt.connect(data);
             }
 
-        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {    // 블루투스 연결해주세요. 인텐트 결과
             if(resultCode == Activity.RESULT_OK) {
+                Log.d(TAG, "블루투스 요청 후 켰음. 자동 연결");
                 bt.setupService();
-                Log.d(TAG, "블루투스 요청 후 켰음");
+                bt.startService(BluetoothState.DEVICE_OTHER);
+                setup();
             } else {
                 Log.d(TAG, "블루투스 요청 후 취소");
-                // Do something if user doesn't choose any device (Pressed back)
+                Toast.makeText(getApplicationContext(), "블루투스를 연결해야 서비스가 가능합니다.", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     public void setup() {
         //bt.autoConnect("HC-06");
-        bt.autoConnect("HC-06");
+        bt.autoConnect("wonjun");
     }
 }
