@@ -30,8 +30,8 @@
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:label="@string/app_name"/>
+            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" 이거 넣으니 can't resolove symbol R 에러-->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

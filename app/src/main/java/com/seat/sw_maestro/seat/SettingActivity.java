@@ -1,5 +1,7 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -9,8 +11,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
+import app.akexorcist.bluetotohspp.library.BluetoothState;
+
 public class SettingActivity extends PreferenceActivity {
 
+    BluetoothSPP bt; // 블루투스 테스트
     private static final String TAG = "SettingActivity";
 
     @Override
@@ -19,32 +25,47 @@ public class SettingActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.setting);
         Log.d(TAG, "SettingActivity");
 
-        // 테스트용 나중에 지울것
-        DatabaseManager databaseManager = new DatabaseManager(getApplicationContext());
-        String date = databaseManager.getCurrentDay();  // 현재의 날짜 예)20160926
-        String timeLine = databaseManager.getCurrentHour(); // 현재의 시간 14:25면 14를 리턴
-        //databaseManager.insertData(timeLine,53,78,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
 
-        // 임시 데이터
-        databaseManager.insertData("0",13,78,"20160927");
-        databaseManager.insertData("1",12,76,"20160927");
-        databaseManager.insertData("2",18,86,"20160927");
-        databaseManager.insertData("3",19,58,"20160927");
-        databaseManager.insertData("4",13,47,"20160927");
-        databaseManager.insertData("5",51,75,"20160927");
+        Perceptron perceptron;
+        perceptron = new Perceptron(2); // 2개의 인풋을 위한 뉴럴 네트워크 생성
+        float [][]fArray;
+        int []iArray;
+        DataUtils dataUtils = new DataUtils();
+        fArray = dataUtils.readInputsFromFile(getApplicationContext()); // 인풋 파일 읽어오고...
+        iArray = dataUtils.readOutputsFromFile(getApplicationContext());
 
-        databaseManager.insertData("1",23,82,"20160926");
-        databaseManager.insertData("2",35,78,"20160926");
-        databaseManager.insertData("3",45,78,"20160926");
-        databaseManager.insertData("23",55,78,"20160926");
-        Log.d(TAG,"9월의 총 합 : " + databaseManager.getSittingTime_Month("201609")); // 9월의 데이터 다 더해
-        //databaseManager.selectData();   // 조회
-        //Log.d(TAG,"sittingTime : " + databaseManager.getSittingTime("15","20160925"));
-        //Log.d(TAG,"accuracy : " + databaseManager.getAccuracy("15","20160925"));
-        //Log.d(TAG,"sittingTime_OneDay : " + databaseManager.getSittingTime_OneDay("20160925"));
-        //Log.d(TAG,"accuracy_OneDay : " + databaseManager.getAccuracy_OneDay("20160926"));
-        //databaseManager.getCurrentMonth();
-        //databaseManager.getCurrentYear();
+        Log.d(TAG, "학습 전 예측 : " + perceptron.feedforward(fArray[0]));
+        for(int i = 0; i<100; i++){
+            perceptron.train(fArray[i],iArray[i]);  // 학습을 돌려보장
+            perceptron.train(fArray[i],iArray[i]);  // 학습을 돌려보장
+            perceptron.train(fArray[i],iArray[i]);  // 학습을 돌려보장
+        }
+        for(int i = 0; i<100; i++){
+            Log.d(TAG, "운동 : " + fArray[i][0] + " 담배 : " + fArray[i][1] + " 결과 : " + perceptron.feedforward(fArray[i]));
+        }
+
+
+
+        /*
+        // 블루투스 테스트용 나중에 지워
+        bt = new BluetoothSPP(getApplicationContext());
+
+        if(!bt.isBluetoothAvailable()) {    // 블루투스 자체를 지원 안함
+            Toast.makeText(getApplicationContext(), "블루투스가 가능한 기기가 아닙니다.", Toast.LENGTH_LONG).show();
+        }
+        else {  // 블루투스는 됨
+            if (!bt.isBluetoothEnabled()) { // 되지만, 블루투스가 켜져있지 않음
+                //Toast.makeText(getApplicationContext(), "블루투스가 가능하지 않습니다.", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+            } else {    // 되면서 켜져있으면...
+                Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+                startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+            }
+        }
+
+        // 여기까지 블루투스 테스트
+        */
 
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 
@@ -56,8 +77,8 @@ public class SettingActivity extends PreferenceActivity {
     private Preference.OnPreferenceChangeListener onPreferenceChangeListener = new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            Log.d(TAG, "preference key : " + preference.getKey());
-            Log.d(TAG, "value : " + newValue);
+            //Log.d(TAG, "preference key : " + preference.getKey());
+            //Log.d(TAG, "value : " + newValue);
 
             // 환경설정 정보를 저장하기 위한 sharedPreferences
             SharedPreferences prefs = getSharedPreferences("SettingStatus", MODE_PRIVATE);  // UserStatus 아닌 것 주의!!
@@ -76,5 +97,25 @@ public class SettingActivity extends PreferenceActivity {
 
         onPreferenceChangeListener.onPreferenceChange(mPreference,
                 PreferenceManager.getDefaultSharedPreferences(mPreference.getContext()).getString(mPreference.getKey(), ""));
+    }
+
+    // 블루투스 테스트
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if(resultCode == Activity.RESULT_OK) {
+                //bt.connect(data);
+                Log.d(TAG, "test1");
+            }
+
+        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if(resultCode == Activity.RESULT_OK) {
+                //bt.setupService();
+                Log.d(TAG, "test2");
+
+            } else {
+                Log.d(TAG, "test3");
+                // Do something if user doesn't choose any device (Pressed back)
+            }
+        }
     }
 }

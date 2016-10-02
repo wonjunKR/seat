@@ -131,12 +131,12 @@ public class Tab2 extends Fragment {
                         // 그래프 매니저를 통해서 쉽게 그래프를 위한 데이터 셋을 만들 수 있다.
                         LineData lineChart_time_data = graphManager.makeLineData(timeDatas,index,labels,"time", getContext()); // 만든 데이터 셋
                         lineChart_time.setData(lineChart_time_data); // 만든 데이터 셋을 차트에만 연결해주면 됨.
-                        lineChart_time.animateY(5000);
+                        lineChart_time.animateY(2000);
 
                         // 정확도 그래프
                         LineData lineChart_accuracy_data = graphManager.makeLineData(accuracyDatas,index,labels,"accuracy", getContext()); // 만든 데이터 셋
                         lineChart_accuracy.setData(lineChart_accuracy_data);
-                        lineChart_accuracy.animateY(5000);
+                        lineChart_accuracy.animateY(2000);
                         break;
 
                     case "1" :  // 막대 그래프
@@ -147,12 +147,12 @@ public class Tab2 extends Fragment {
                         // 그래프 매니저를 통해서 쉽게 그래프를 위한 데이터 셋을 만들 수 있다.
                         BarData barChart_time_data = graphManager.makeBarData(timeDatas,index,labels,"time", getContext()); // 만든 데이터 셋
                         barChart_time.setData(barChart_time_data);
-                        barChart_time.animateY(5000);
+                        barChart_time.animateY(2000);
 
                         // 정확도 그래프
                         BarData barChart_accuracy_data = graphManager.makeBarData(accuracyDatas,index,labels,"accuracy", getContext()); // 만든 데이터 셋
                         barChart_accuracy.setData(barChart_accuracy_data);
-                        barChart_accuracy.animateY(5000);
+                        barChart_accuracy.animateY(2000);
                         break;
                 }
             }
