@@ -37,6 +37,13 @@ public class Tutorial2Activity extends AppCompatActivity {
     private static final String SeatName = "wonjun";    // 방석의 블루투스 이름을 입력한다.
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bt.stopService();   // 블루투스 연결 종료. 이걸 안해주면 TabActivity로 들어가서 새로 자동연결을 하려는데 이미 연결되서 안된다.
+        bt = null;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial2);
@@ -91,6 +98,7 @@ public class Tutorial2Activity extends AppCompatActivity {
                 if(isPairedSeat(SeatName)){  // 페어링 리스트 중에 방석이 있으면 넘어간다.
                     startActivity(new Intent(getApplicationContext(), Tutorial3Activity.class));  // 다음으로 이동
                     finish();   // 끝내기
+
                 } else {    // 이 경우에는 사용자가 다른 블루투스 기기를 선택해버렸음. 다시 요청한다.
                     Toast.makeText(getApplicationContext(), "잘못된 기기를 선택하였습니다.", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(getApplicationContext(), DeviceList.class);
@@ -160,4 +168,5 @@ public class Tutorial2Activity extends AppCompatActivity {
         }
         return isPairedSeat;
     }
+
 }

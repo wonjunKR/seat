@@ -83,7 +83,7 @@ public class FacebookLoginActivity extends AppCompatActivity {
 
                 //Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
 
-                startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
+                startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 다음으로 이동
             }
         });
     }

@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                             editor.putString("UserNumber", jsonObject.getString("UserNumber")); // UserNumber 세팅
                             editor.commit();
 
-                            startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
+                            startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 다음으로 이동
                         }
                         else{   // 로그인 실패
                             Toast.makeText(getApplicationContext(), "아이디 혹은 비밀번호를 확인해주세요.", Toast.LENGTH_LONG).show();

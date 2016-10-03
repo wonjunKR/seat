@@ -116,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(prefs.getString("isLoggedIn", "false").equals("true")){  // 이미 로그인이 되어있는 경우 아래는 스킵
             Log.d(TAG, "로그인이 되어있음.");
-            startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));
-            //startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
+            startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
             finish();
         }
 

@@ -37,7 +37,7 @@ public class DataUtils {
         // 이제 하나씩 읽어와서 배열로 만들기 위함.
         fArray = new float[lineCount][];    // 새롭게 float 배열을 만들어준다. 라인 수 만큼 할당..
         try {
-            InputStream inputStream = res.openRawResource(R.raw.data_input);  // res -> raw -> data.txt 파일 읽을 것임.
+            InputStream inputStream = res.openRawResource(R.raw.data_input);  // res -> raw -> data_input.txt 파일 읽을 것임.
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             for(int i = 0; i<lineCount; i++){   // 읽어온 파일 한줄씩 내려가면서
                 String line = reader.readLine();
@@ -72,7 +72,7 @@ public class DataUtils {
         // 하나씩 읽어와 배열로
         iArray = new int[lineCount];    // 새롭게 int 배열을 할당
         try {
-            InputStream inputStream = res.openRawResource(R.raw.data_output);  // res -> raw -> data.txt 파일 읽을 것임.
+            InputStream inputStream = res.openRawResource(R.raw.data_output);  // res -> raw -> data_output.txt 파일 읽을 것임.
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             for(int i = 0; i<lineCount; i++){   // 읽어온 파일 한줄씩 내려가면서
                 String line = reader.readLine();

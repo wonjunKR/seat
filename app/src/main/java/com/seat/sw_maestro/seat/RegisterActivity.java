@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                     editor.putString("UserNumber", result); // UserNumber 세팅
                     editor.commit();
 
-                    startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 다음으로 이동
+                    startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 다음으로 이동
                     finish();
                 }
             }
