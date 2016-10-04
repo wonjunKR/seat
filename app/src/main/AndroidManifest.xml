@@ -41,7 +41,9 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".Tutorial1Activity" />
         <activity android:name=".Tutorial2Activity" />
-        <activity android:name=".Tutorial3Activity"></activity>
+        <activity android:name=".Tutorial3Activity" />
+        <service android:name=".BluetoothService" />    <!-- 블루투스 서비스 -->
+
     </application>
 
 </manifest>

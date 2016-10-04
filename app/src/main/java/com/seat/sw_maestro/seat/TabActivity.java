@@ -27,21 +27,18 @@ public class TabActivity extends AppCompatActivity {
     CharSequence Titles[]={"요약","대시보드","실시간"};
     int numberOfTabs =3;
     BluetoothSPP bt; // 블루투스
+    // 디바이스와 방석을 연결하는 부분은 BluetoothService에서 담당한다. 여기서는 블루투스 온오프 체크 및 페어링 상태만 체크하고
+    // 넘어가도 된다면 BluetoothService를 호출한다.
 
     private static final String TAG = "TabActivity";
     private static final String SeatName = "wonjun";    // 방석의 블루투스 이름을 입력한다.
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        bt.stopService();   // 블루투스 연결 종료.
-        bt = null;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab);
+
+        Log.d(TAG,"onCreate");
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
@@ -58,7 +55,7 @@ public class TabActivity extends AppCompatActivity {
             }
         });
         tabs.setViewPager(pager);
-        // 요 위까지는 텝메뉴와 관련됨.
+        // 여기까지는 텝메뉴와 관련됨.
 
         buttonSetting = (ImageButton) findViewById(R.id.buttonSetting);  // 세팅하기로 가는 버튼
         buttonSetting.setOnClickListener(new View.OnClickListener() {
@@ -80,24 +77,15 @@ public class TabActivity extends AppCompatActivity {
                 startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
             } else {    // 블루투스가 켜져있다면.
                 if(isPairedSeat(SeatName)){ // 만약 SeatName과 페어링 되어 있다면 튜토리얼을 정상적으로 마침 + 설정에서 제거 안했음.
-                    // 자동연결
-                    bt.setupService();
-                    bt.startService(BluetoothState.DEVICE_OTHER);
-                    bt.autoConnect(SeatName);
+                    Log.d(TAG,"블루투스 서비스를 부른다");
+                    Intent bluetoothService = new Intent(getApplicationContext(), BluetoothService.class);
+                    startService(bluetoothService);
                 } else{ // 아니라면 튜토리얼을 정상적으로 마치지 않았거나, 설정에서 제거해버림.
                     startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 튜토리얼로 다시 이동
                     finish();   // 끝내기
                 }
             }
         }
-
-        bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
-            public void onDataReceived(byte[] data, String message) {
-                // Do something when data incoming
-                Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
-                bt.send("1",true);
-            }
-        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -105,10 +93,9 @@ public class TabActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 Log.d(TAG, "블루투스 요청 후 켰음.");
                 if(isPairedSeat(SeatName)){  // 페어링 리스트 중에 방석이 있으면 넘어간다.
-                    // 자동연결
-                    bt.setupService();
-                    bt.startService(BluetoothState.DEVICE_OTHER);
-                    bt.autoConnect(SeatName);
+                    Log.d(TAG,"블루투스 서비스를 부른다");
+                    Intent bluetoothService = new Intent(getApplicationContext(), BluetoothService.class);
+                    startService(bluetoothService);
                 } else {
                     startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 튜토리얼로 다시 이동
                     finish();   // 끝내기
