@@ -4,30 +4,44 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10">
-    
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:weightSum="10"
-        android:orientation="horizontal"
-        android:background="#455A64"
-        android:layout_margin="15dp">
-        <ImageView
+        android:orientation="horizontal">
+        <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:src="@drawable/cushion"/>
+            android:layout_weight="0.5"/>
+        <ImageView
+            android:padding="5dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/cushion"
+            android:background="#455A64"/>
         <TextView
             android:id="@+id/bluetoothState"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="7"
+            android:layout_weight="8"
             android:text="방석이 연결되지 않았습니다."
             android:textSize="15pt"
             android:textAlignment="center"
-            android:textColor="#FFFFFF"/>
-
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:background="#455A64"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
     </LinearLayout>
 </LinearLayout>
 

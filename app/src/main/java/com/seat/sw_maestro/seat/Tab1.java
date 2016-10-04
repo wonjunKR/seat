@@ -13,10 +13,13 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 
 public class Tab1 extends Fragment {
 
@@ -69,13 +72,13 @@ public class Tab1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.tab_1,container,false);
 
-
         return v;
-
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        BluetoothSPP bt = new BluetoothSPP(getContext());
+        Log.d(TAG, "방석 상태 : " + bt.getServiceState());
 
         textView_bluetoothState = (TextView) getActivity().findViewById(R.id.bluetoothState);  // 블루투스 연결 상태를 보여주는 텍스트뷰
         // service 연결 시도

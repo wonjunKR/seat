@@ -9,6 +9,9 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 
@@ -29,6 +32,7 @@ public class BluetoothService extends Service {
         return new Messenger(new RemoteHandler()).getBinder();
     }
 
+    // 다른 핸들러를 만들려면 what을 바꿔서 또 만들자.
     public void remoteSendMessage(String data) {    // 액티비티로 메시지 전달. 방석의 연결 유무 상태를 나타내주기 위해 사용
         if (mRemote != null) {
             Message msg = new Message();
@@ -49,6 +53,7 @@ public class BluetoothService extends Service {
             switch (msg.what) { // 메시지의 what의 타입에 따라서 보내는게 달라진다. 여러 액티비티에 보내야하는 경우에는 나눠야겠지?
                 case 0 :    // 0은 방석 연결 유무용
                     // Register activity hander
+                    //Log.d(TAG, "handleMessage");
                     mRemote = (Messenger) msg.obj;
                     break;
                 default :
@@ -97,6 +102,20 @@ public class BluetoothService extends Service {
                 }
             }
         });
+
+        // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                //Log.d(TAG,"반복 실행");
+                //Log.d(TAG,"state : " + bt.getServiceState());
+                if(bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                    remoteSendMessage("1"); // 연결되었다고 보내자.
+                else
+                    remoteSendMessage("0");
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask,1000,3000);
 
         Log.d(TAG,"서비스가 시작되었습니다.");
         super.onCreate();
