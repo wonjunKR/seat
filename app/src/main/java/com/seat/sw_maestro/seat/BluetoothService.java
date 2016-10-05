@@ -77,6 +77,7 @@ public class BluetoothService extends Service {
             public void onDataReceived(byte[] data, String message) {
                 // Do something when data incoming
                 //Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
+                //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
                 //bt.send("1",true);
             }
         });
@@ -108,7 +109,7 @@ public class BluetoothService extends Service {
             public void run() {
                 //Log.d(TAG,"반복 실행");
                 //Log.d(TAG,"state : " + bt.getServiceState());
-                if(bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                if(bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
                     remoteSendMessage("1"); // 연결되었다고 보내자.
                 else
                     remoteSendMessage("0");
@@ -124,6 +125,9 @@ public class BluetoothService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG,"서비스가 종료되었습니다.");
+        bt.stopService();
+        bt.stopAutoConnect();
+        bt = null;
         super.onDestroy();
     }
 }

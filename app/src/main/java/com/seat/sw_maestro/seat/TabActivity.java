@@ -93,9 +93,17 @@ public class TabActivity extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 Log.d(TAG, "블루투스 요청 후 켰음.");
                 if(isPairedSeat(SeatName)){  // 페어링 리스트 중에 방석이 있으면 넘어간다.
-                    Log.d(TAG,"블루투스 서비스를 부른다");
-                    Intent bluetoothService = new Intent(getApplicationContext(), BluetoothService.class);
-                    startService(bluetoothService);
+                    startActivity(new Intent(getApplicationContext(), TabActivity.class));  // 액티비티 재실행한다.
+                    finish();   // 끝내기
+
+                    // 이렇게 하는 이유는 Tab1에서 바인드를 해줘야 방석연결 상태를 정확히 보여줌.
+                    // Tab1에서는 Tab1이 생성될 때 바인드를 하는데... 요청에서 예를 누른 다음에는 바인드를 할 시기를 놓침.
+                    // 따라서 그냥 새로 만들어줘서 처리하는 것으로 함.
+
+                    // 기존의 방식. 바인드 할 시기를 놓쳐서 제대로 보여주지 못함.
+                    //Log.d(TAG,"블루투스 서비스를 부른다");
+                    //Intent bluetoothService = new Intent(getApplicationContext(), BluetoothService.class);
+                    //startService(bluetoothService);
                 } else {
                     startActivity(new Intent(getApplicationContext(), Tutorial1Activity.class));  // 튜토리얼로 다시 이동
                     finish();   // 끝내기

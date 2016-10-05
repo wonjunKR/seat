@@ -77,13 +77,17 @@ public class Tab1 extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         BluetoothSPP bt = new BluetoothSPP(getContext());
         Log.d(TAG, "방석 상태 : " + bt.getServiceState());
 
         textView_bluetoothState = (TextView) getActivity().findViewById(R.id.bluetoothState);  // 블루투스 연결 상태를 보여주는 텍스트뷰
+
         // service 연결 시도
-        Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
-        getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        if(bt.isBluetoothEnabled()) {   // 블루투스가 켜져있을때만 바인드를 시도함.
+            Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
+            getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        }
 
         super.onActivityCreated(savedInstanceState);
     }
