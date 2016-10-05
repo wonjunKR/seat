@@ -125,9 +125,7 @@ public class BluetoothService extends Service {
     @Override
     public void onDestroy() {
         Log.d(TAG,"서비스가 종료되었습니다.");
-        bt.stopService();
-        bt.stopAutoConnect();
-        bt = null;
         super.onDestroy();
+        bt.stopService();
     }
 }

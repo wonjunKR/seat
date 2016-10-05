@@ -61,6 +61,15 @@ public class Tab1 extends Fragment {
             super.handleMessage(msg);
         }
     }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try{
+            getActivity().unbindService(mConnection);    // 서비스가 먼저 동작중인지 알아보고 언바인드 해야해
+        } catch (IllegalArgumentException e){
+            Log.d(TAG, "서비스가 동작 안했는데 언바운드 함. 이게 문제가 될까...?");
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
