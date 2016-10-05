@@ -225,6 +225,7 @@ public class DatabaseManager {
             sittingTime_OneDay = result.getInt(0);
         }
         result.close();
+        //Log.d(TAG, "오늘 앉은 시간 " + sittingTime_OneDay);
 
         return sittingTime_OneDay;
     }
@@ -314,12 +315,13 @@ public class DatabaseManager {
         String day;
         for(int i = 1; i <= 31; i++){
             if(i<10){
-                day = String.format ("%01d", i);    // 10 이하의 경우
+                day = String.format ("%02d", i);    // 10 이하의 경우
             }
             else{
                 day = String.format ("%02d", i);    // 이상의 경우
             }
             String date = year + month + day;   // 날짜를 조합했음.
+
             int data = getSittingTime_OneDay(date);    // 그 날짜의 하루 데이터를 다 더한다.
             timeDatas[i-1] = data;
         }
@@ -335,7 +337,7 @@ public class DatabaseManager {
         String day;
         for(int i = 1; i <= 31; i++){
             if(i<10){
-                day = String.format ("%01d", i);    // 10 이하의 경우
+                day = String.format ("%02d", i);    // 10 이하의 경우
             }
             else{
                 day = String.format ("%02d", i);    // 이상의 경우

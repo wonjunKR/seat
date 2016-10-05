@@ -65,6 +65,7 @@ public class BluetoothService extends Service {
 
     @Override
     public void onCreate() {
+
         bt = new BluetoothSPP(getApplicationContext());
 
         // 자동연결부분
@@ -75,48 +76,44 @@ public class BluetoothService extends Service {
         // 리스너
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
-                // Do something when data incoming
-                //Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
-                //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
-                //bt.send("1",true);
+                    // Do something when data incoming
+                    //Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
+                    //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
+                    //bt.send("1",true);
             }
         });
 
         // 블루투스 상태 리스너
         bt.setBluetoothStateListener(new BluetoothSPP.BluetoothStateListener() {
             public void onServiceStateChanged(int state) {
-                if(state == BluetoothState.STATE_CONNECTED){
+                if (state == BluetoothState.STATE_CONNECTED) {
                     Log.d(TAG, "연결된 상태");
                     remoteSendMessage("1");
-                }
-                else if(state == BluetoothState.STATE_CONNECTING) {
+                } else if (state == BluetoothState.STATE_CONNECTING) {
                     Log.d(TAG, "연결중인 상태");
                     remoteSendMessage("0");
-                }
-                else if(state == BluetoothState.STATE_LISTEN) {
+                } else if (state == BluetoothState.STATE_LISTEN) {
                     Log.d(TAG, "리슨 상태");
                     remoteSendMessage("0");
-                }
-                else if(state == BluetoothState.STATE_NONE) {
+                } else if (state == BluetoothState.STATE_NONE) {
                     Log.d(TAG, "아무것도 아닌 상태");
                     remoteSendMessage("0");
                 }
             }
         });
-
         // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 //Log.d(TAG,"반복 실행");
                 //Log.d(TAG,"state : " + bt.getServiceState());
-                if(bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
                     remoteSendMessage("1"); // 연결되었다고 보내자.
                 else
                     remoteSendMessage("0");
             }
         };
         Timer timer = new Timer();
-        timer.schedule(timerTask,1000,3000);
+        timer.schedule(timerTask, 1000, 3000);
 
         Log.d(TAG,"서비스가 시작되었습니다.");
         super.onCreate();

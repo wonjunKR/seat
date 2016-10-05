@@ -27,6 +27,8 @@ public class Tab1 extends Fragment {
     private Messenger mRemote;  // 블루투스 서비스로부터 받아오는 메시지. 블루투스 연결 상태를 확인하기 위해서
 
     TextView textView_bluetoothState;
+    TextView textViewTodaySittingTime;
+    TextView textViewTodayAccuracy;
 
     private ServiceConnection mConnection = new ServiceConnection() {   // 서비스와 핸들러를 연결해주는 부분
         @Override
@@ -90,7 +92,16 @@ public class Tab1 extends Fragment {
         BluetoothSPP bt = new BluetoothSPP(getContext());
         Log.d(TAG, "방석 상태 : " + bt.getServiceState());
 
+        textViewTodaySittingTime = (TextView) getActivity().findViewById(R.id.textViewTodaySittingTime);   // 오늘 앉은 시간
+        textViewTodayAccuracy = (TextView) getActivity().findViewById(R.id.textViewTodayAccuracy);  // 오늘 정확도
         textView_bluetoothState = (TextView) getActivity().findViewById(R.id.bluetoothState);  // 블루투스 연결 상태를 보여주는 텍스트뷰
+
+        DatabaseManager databaseManager = new DatabaseManager(getContext());
+        databaseManager.insertData("0",53,70,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
+        int sittingTime = databaseManager.getSittingTime_OneDay(databaseManager.getCurrentDay());   // 오늘 하루 앉은 시간 받아옴. 분으로
+        int[] hourAndMinute = getHourMinute(sittingTime);   // [0]엔 시간, [1]엔 분 / 예) 170분 -> 2시간 50분으로 변환
+        textViewTodaySittingTime.setText(hourAndMinute[0] + "시간 " + hourAndMinute[1] + "분 앉았습니다."); // 오늘 앉은 시간 세팅
+        textViewTodayAccuracy.setText(databaseManager.getAccuracy_OneDay(databaseManager.getCurrentDay()) + "%"); // 오늘 정확도 세팅
 
         // service 연결 시도
         if(bt.isBluetoothEnabled()) {   // 블루투스가 켜져있을때만 바인드를 시도함.
@@ -106,5 +117,12 @@ public class Tab1 extends Fragment {
             textView_bluetoothState.setText("방석이 연결되었습니다.");
         else
             textView_bluetoothState.setText("방석이 연결되지 않았습니다.");
+    }
+
+    public int[] getHourMinute(int sittingTime){    // 분 단위의 sittingTime을 넣으면 몇 시,몇 분으로 바꾸어서 리턴
+        int[] hourAndMinute = new int[2];
+        hourAndMinute[0] = sittingTime / 60;  // 시간은 60으로 나눈 몫
+        hourAndMinute[1] = sittingTime % 60;  // 분은 60으로 나눈 나머지
+        return hourAndMinute;
     }
 }
