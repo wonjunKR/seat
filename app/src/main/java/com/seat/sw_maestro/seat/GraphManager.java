@@ -8,6 +8,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 
@@ -50,6 +52,13 @@ public class GraphManager {
         lineChart_dataSet.setColors(new int[] {context.getResources().getColor(R.color.mainColor)});    // 색상
         lineChart_dataSet.setDrawFilled(true);
 
+        // 그래프에 표시될 값을 커스터마이징   예) 324 -> 5시간 24분
+        if(description.equals("time")) {  // 시간 전용
+            lineChart_data.setValueFormatter(new valueFormatter_time());
+        } else if(description.equals("accuracy")){
+            lineChart_data.setValueFormatter(new valueFormatter_accuracy());
+        }
+
         return lineChart_data;
     }
 
@@ -74,6 +83,52 @@ public class GraphManager {
         barChart_dataSet.setColors(new int[] {context.getResources().getColor(R.color.mainColor)}); // 막대 그래프 색상
         BarData barChart_data = new BarData(barChart_labels, barChart_dataSet);
 
+        // 그래프에 표시될 값을 커스터마이징   예) 324 -> 5시간 24분
+        if(description.equals("time")) {  // 시간 전용
+            barChart_data.setValueFormatter(new valueFormatter_time());
+        } else if(description.equals("accuracy")){
+            barChart_data.setValueFormatter(new valueFormatter_accuracy());
+        }
+
+
         return barChart_data;
+    }
+
+    // 그래프의 값을 소수점이 아닌 정수로 보여주기 위함. 시간은 몇 시 몇 분으로 변환해서 보여주기.
+    public class valueFormatter_time implements ValueFormatter {
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            //Log.d(TAG,"value : " + value);
+            if(value == 0.0){   // 0인 경우에는 그냥 보여주지 않음.
+                return "";
+            }
+            int[] hourAndMinyute = new int[2];
+            hourAndMinyute = getHourMinute((int)value); // 소수점은 버리고 변환시킴
+
+            if(hourAndMinyute[0] == 0){ // 1시간 넘지않는경우
+                return hourAndMinyute[1] + "분";
+            } else{
+                return hourAndMinyute[0] + "시간" + hourAndMinyute[1] + "분";
+            }
+        }
+    }
+
+    // 그래프의 값을 소수점이 아닌 정수로 보여주기 위함.
+    public class valueFormatter_accuracy implements ValueFormatter {
+        @Override
+        public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+            //Log.d(TAG,"value : " + value);
+            if(value == 0.0){   // 0인 경우에는 그냥 보여주지 않음.
+                return "";
+            }
+            return Math.round(value) + "%";
+        }
+    }
+
+    public int[] getHourMinute(int sittingTime){    // 분 단위의 sittingTime을 넣으면 몇 시,몇 분으로 바꾸어서 리턴
+        int[] hourAndMinute = new int[2];
+        hourAndMinute[0] = sittingTime / 60;  // 시간은 60으로 나눈 몫
+        hourAndMinute[1] = sittingTime % 60;  // 분은 60으로 나눈 나머지
+        return hourAndMinute;
     }
 }
