@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -27,8 +28,11 @@ public class Tab1 extends Fragment {
     private Messenger mRemote;  // 블루투스 서비스로부터 받아오는 메시지. 블루투스 연결 상태를 확인하기 위해서
 
     TextView textView_bluetoothState;
-    TextView textViewTodaySittingTime;
-    TextView textViewTodayAccuracy;
+    TextView textView_TodaySittingTime;
+    TextView textView_TodayAccuracy;
+    TextView textView_TodayComment;
+    TextView textView_BarGauge1;
+    TextView textView_BarGauge2;
 
     private ServiceConnection mConnection = new ServiceConnection() {   // 서비스와 핸들러를 연결해주는 부분
         @Override
@@ -55,7 +59,7 @@ public class Tab1 extends Fragment {
     // 서비스로부터 메시지 받았을 때 어떻게 처리할 것인가? - 우리는 방석의 블루투스 연결 상태를 바꿔준다.
     private class RemoteHandler extends Handler {
         @Override
-        public void handleMessage(Message msg) {    // 핸들러 메시지로는 1이면 연결상태, 0이면 연결안된 상태가 들어온다.
+        public void handleMessage(Message msg) {    // 핸들러 메시지로는 1이면 연결상태, 0이면 연결이 끊어진 상태이다.
             if(msg.obj.toString() == "1")
                 changeBluetoothState(1);
             else
@@ -92,17 +96,31 @@ public class Tab1 extends Fragment {
         BluetoothSPP bt = new BluetoothSPP(getContext());
         Log.d(TAG, "방석 상태 : " + bt.getServiceState());
 
-        textViewTodaySittingTime = (TextView) getActivity().findViewById(R.id.textViewTodaySittingTime);   // 오늘 앉은 시간
-        textViewTodayAccuracy = (TextView) getActivity().findViewById(R.id.textViewTodayAccuracy);  // 오늘 정확도
+        textView_TodaySittingTime = (TextView) getActivity().findViewById(R.id.textViewTodaySittingTime);   // 오늘 앉은 시간
+        textView_TodayAccuracy = (TextView) getActivity().findViewById(R.id.textViewTodayAccuracy);  // 오늘 정확도
         textView_bluetoothState = (TextView) getActivity().findViewById(R.id.bluetoothState);  // 블루투스 연결 상태를 보여주는 텍스트뷰
+        textView_BarGauge1 = (TextView) getActivity().findViewById(R.id.textViewBarGauge1); // 정확도 게이지1
+        textView_BarGauge2 = (TextView) getActivity().findViewById(R.id.textViewBarGauge2); // 정확도 게이지2
+        textView_TodayComment = (TextView) getActivity().findViewById(R.id.textViewTodayComment); // 오늘의 자세 코멘트
 
         DatabaseManager databaseManager = new DatabaseManager(getContext());
-        databaseManager.insertData("0",53,70,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
+
+        // 앉은 시간 세팅 부분
         int sittingTime = databaseManager.getSittingTime_OneDay(databaseManager.getCurrentDay());   // 오늘 하루 앉은 시간 받아옴. 분으로
         int[] hourAndMinute = getHourMinute(sittingTime);   // [0]엔 시간, [1]엔 분 / 예) 170분 -> 2시간 50분으로 변환
-        textViewTodaySittingTime.setText(hourAndMinute[0] + "시간 " + hourAndMinute[1] + "분 앉았습니다."); // 오늘 앉은 시간 세팅
-        textViewTodayAccuracy.setText(databaseManager.getAccuracy_OneDay(databaseManager.getCurrentDay()) + "%"); // 오늘 정확도 세팅
+        textView_TodaySittingTime.setText(hourAndMinute[0] + "시간 " + hourAndMinute[1] + "분 앉아 있음."); // 오늘 앉은 시간 세팅
 
+        // 정확도 세팅 부분
+        int accuracy = databaseManager.getAccuracy_OneDay(databaseManager.getCurrentDay()); // 오늘의 정확도. 코멘트, 게이지에도 쓰임
+        textView_TodayAccuracy.setText(accuracy + "%"); // 오늘 정확도 세팅
+
+        // 자세 코멘트 부분. 정확도 값에 따라서 오늘의 코멘트 값을 바꿔준다.
+        changeTodayComment(accuracy);
+
+        // 정확도 게이지 세팅 부분
+        setBarGauge(accuracy);
+
+        // 방석 상황을 표시하기 위한 부분
         // service 연결 시도
         if(bt.isBluetoothEnabled()) {   // 블루투스가 켜져있을때만 바인드를 시도함.
             Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
@@ -114,9 +132,30 @@ public class Tab1 extends Fragment {
 
     public void changeBluetoothState(int state){    // 1이면 연결된 상태, 다른 값은 연결되지 않은 상태로 한다.
         if(state == 1)
-            textView_bluetoothState.setText("방석이 연결되었습니다.");
+            textView_bluetoothState.setText("방석이 연결되어 있습니다.");
         else
             textView_bluetoothState.setText("방석이 연결되지 않았습니다.");
+    }
+
+    public void changeTodayComment(int accuracy){   // 정확도 값에 자세 코멘트를 바꿔준다.
+        if(accuracy >=70){
+            textView_TodayComment.setText("좋은 자세를 잘 유지하고 있습니다!");
+        } else if(accuracy >= 50){
+            textView_TodayComment.setText("자세에 신경을 더 써보세요!");
+        } else{
+            textView_TodayComment.setText("자세가 좋지 않습니다!");
+        }
+    }
+
+    public void setBarGauge(int accuracy){  // 정확도 값에 따라서 바 게이지를 조절한다.
+        // tab_1.xml 가보면 이 부분은 weight_sum이 100으로 되어있다.
+        // 따라서 활성화 부분은 위에서 구한 accuracy를 잡고, 나머지 부분은 100 - accuracy로 구한다.
+        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT);
+        params1.weight = accuracy;
+        textView_BarGauge1.setLayoutParams(params1);
+        params2.weight = 100-accuracy;
+        textView_BarGauge2.setLayoutParams(params2);
     }
 
     public int[] getHourMinute(int sittingTime){    // 분 단위의 sittingTime을 넣으면 몇 시,몇 분으로 바꾸어서 리턴

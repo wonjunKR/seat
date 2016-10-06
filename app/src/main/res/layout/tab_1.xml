@@ -25,32 +25,113 @@
             android:layout_height="match_parent"
             android:layout_weight="9.5"
             android:textStyle="bold"
-            android:textSize="15pt"/>
+            android:textSize="15pt"
+            android:text="sittingTime"/>
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:weightSum="10"
+        android:layout_weight="3"
+        android:weightSum="100"
         android:orientation="horizontal">
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
-        <TextView
-            android:id="@+id/textViewTodayAccuracy"
+            android:layout_weight="5"/>
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="9.5"
-            android:textStyle="bold"
-            android:textSize="15pt"/>
+            android:layout_weight="90">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="100"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/textViewBarGauge1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="80"
+                    android:background="@color/mainColor"/>
+                <TextView
+                    android:id="@+id/textViewBarGauge2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="20"
+                    android:background="#00595C"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/textViewTodayAccuracy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="20pt"
+                android:text="20%"
+                android:paddingLeft="20dp"
+                android:layout_above="@+id/textViewTodayComment"
+                />
+            <TextView
+                android:id="@+id/textViewTodayComment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="10pt"
+                android:text="좋은 자세를 유지하고 있습니다."
+                android:paddingLeft="20dp"
+                android:paddingBottom="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"/>
     </LinearLayout>
+
+    <!--
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:weightSum="100"
+        android:orientation="horizontal">
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"/>
+        <TextView
+            android:id="@+id/textViewBarGauge1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="70"
+            android:background="@color/mainColor"
+            android:text= "좋은 자세를 잘 유지하고 있습니다."
+            android:textColor="#FFFFFF"
+            android:textSize="10pt"
+            android:gravity="center"/>
+        <TextView
+            android:id="@+id/textViewBarGauge2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:background="#00595C"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+    </LinearLayout>
+    -->
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_weight="1.5"
         android:weightSum="10"
         android:orientation="horizontal">
         <Space
@@ -58,17 +139,17 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"/>
         <ImageView
-            android:padding="5dp"
+            android:padding="25dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:src="@drawable/cushion"
             android:background="#455A64"/>
         <TextView
             android:id="@+id/bluetoothState"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="8"
+            android:layout_weight="7"
             android:text="방석이 연결되지 않았습니다."
             android:textSize="15pt"
             android:textAlignment="center"
