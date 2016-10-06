@@ -63,15 +63,17 @@ public class BluetoothService extends Service {
         }
     }
 
-    // Service handler 추가  액티비티 -> 서비스로 받아오는 경우. 우리의 앱 경우에는 없다.
+    // Service handler 추가  액티비티 -> 서비스로 받아오는 경우.
     private class RemoteHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0 :
                     mRemote = (Messenger) msg.obj;
+                    Log.d(TAG, "탭 1과 연결되었음.");
                     break;
                 case 1 :
+                    Log.d(TAG, "탭 3와 연결되었음.");
                     mRemote = (Messenger) msg.obj;
                     break;
                 default :

@@ -61,15 +61,15 @@ public class Tab1 extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             switch(msg.what){
-                case 0:
+                case 0: // what이 0인 경우에만 Tab1전용 메시지이다.
                     if(msg.obj.toString() == "1")   // 핸들러 메시지로는 1이면 연결상태, 0이면 연결이 끊어진 상태이다.
                         changeBluetoothState(1);
                     else
                         changeBluetoothState(0);
                     break;
-                default :
-                    Log.d(TAG, "등록되지 않은 곳에서 메시지가 옴");
-                    Log.d(TAG, "내용 : " + msg.obj.toString());
+                default :// 나머지는 무시
+                    //Log.d(TAG, "등록되지 않은 곳에서 메시지가 옴");
+                    //Log.d(TAG, "내용 : " + msg.obj.toString());
                     break;
             }
             super.handleMessage(msg);

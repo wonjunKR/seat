@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 
 public class Tab3 extends Fragment {
@@ -54,12 +56,27 @@ public class Tab3 extends Fragment {
         @Override
         public void handleMessage(Message msg) {    // 핸들러 메시지로 어떤 자세인지 받으면 되겠지??
             switch (msg.what){
-                case 1:
-                    Log.d(TAG, "서비스로부터 받은 내 메시지 : " + msg.obj.toString());
+                case 1: // what이 1인 경우에만 Tab3으로 온 메시지로 한다.
+                    //Log.d(TAG, "서비스로부터 받은 내 메시지 : " + msg.obj.toString());
+                    /*
+                        Tab3에서 setPosition으로 텍스트만 바꾸는데.. 만약에 핸들러 메시지로 자세 값이 온다면
+                        이미지를 바꾸는 것으로 자세를 표현할 수 있다.
+                        그래서 이 부분은 간단한 것으로 생각된다.
+
+                        - 그럴려면 선행조건 -
+                        바인드 되는 순간 서비스로 메시지를 보내니까 지금 사용자가 어디 페이지를 보고 잇는지를 알 수 있다. - 확인완료
+
+                        따라서 그때마다 지금 TimeTask를 바꿔서 해당 페이지에 맞는 부분을 구현할 수 있다.
+                        예) 1초마다 방석으로 값 요청 -> Perceptron 클래스 -> 자세의 결과 -> Tab3로 보낸다. -> 자세에 맞게 이미지 바꿈
+
+                        해당 탭이 이동될 때 바인드가 정상적으로 바뀌어야함.
+                        그런데 지금 탭3 -> 탭2 -> 탭1로 가는 경우에는 정상적으로 안되는 상황이 발생함. - 해결필요
+                     */
                     setPosition();
                     break;
                 default:
-                    Log.d(TAG,"등록되지 않은 곳에서 메시지가 옴 : " + msg.obj.toString());
+                    // 나머지는 무시
+                    //Log.d(TAG,"등록되지 않은 곳에서 메시지가 옴 : " + msg.obj.toString());
                     break;
             }
             super.handleMessage(msg);
@@ -78,8 +95,6 @@ public class Tab3 extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-        position = (TextView)getActivity().findViewById(R.id.position);
-
         super.onCreate(savedInstanceState);
     }
 
@@ -94,6 +109,7 @@ public class Tab3 extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         BluetoothSPP bt = new BluetoothSPP(getContext());
+        position = (TextView)getActivity().findViewById(R.id.position);
 
         // 어떤 자세인지 실시간으로 보여주기 위해서
         // service 연결 시도
@@ -107,6 +123,7 @@ public class Tab3 extends Fragment {
     }
 
     public void setPosition(){
-    //    position.setText(new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date(System.currentTimeMillis())));
+        String test = new java.text.SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+        position.setText(test);
     }
 }
