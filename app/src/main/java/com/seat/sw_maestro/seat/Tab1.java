@@ -41,7 +41,7 @@ public class Tab1 extends Fragment {
 
             if (mRemote != null) {  // Activity handler를 service에 전달하기
                 Message msg = new Message();    // 새로운 메시지를 만들고
-                msg.what = 0;
+                msg.what = 0;   // Tab1 에서는 메시지에서 what을 0으로 사용한다. 블루투스 서비스에서 메시지가 어디서부터 왔는지 구분 위해
                 msg.obj = new Messenger(new RemoteHandler());   // 액티비티의 핸들러를 전달한다.
                 try {
                     mRemote.send(msg);  // 전달
@@ -59,11 +59,19 @@ public class Tab1 extends Fragment {
     // 서비스로부터 메시지 받았을 때 어떻게 처리할 것인가? - 우리는 방석의 블루투스 연결 상태를 바꿔준다.
     private class RemoteHandler extends Handler {
         @Override
-        public void handleMessage(Message msg) {    // 핸들러 메시지로는 1이면 연결상태, 0이면 연결이 끊어진 상태이다.
-            if(msg.obj.toString() == "1")
-                changeBluetoothState(1);
-            else
-                changeBluetoothState(0);
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 0:
+                    if(msg.obj.toString() == "1")   // 핸들러 메시지로는 1이면 연결상태, 0이면 연결이 끊어진 상태이다.
+                        changeBluetoothState(1);
+                    else
+                        changeBluetoothState(0);
+                    break;
+                default :
+                    Log.d(TAG, "등록되지 않은 곳에서 메시지가 옴");
+                    Log.d(TAG, "내용 : " + msg.obj.toString());
+                    break;
+            }
             super.handleMessage(msg);
         }
     }
@@ -94,7 +102,6 @@ public class Tab1 extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 
         BluetoothSPP bt = new BluetoothSPP(getContext());
-        Log.d(TAG, "방석 상태 : " + bt.getServiceState());
 
         textView_TodaySittingTime = (TextView) getActivity().findViewById(R.id.textViewTodaySittingTime);   // 오늘 앉은 시간
         textView_TodayAccuracy = (TextView) getActivity().findViewById(R.id.textViewTodayAccuracy);  // 오늘 정확도
@@ -104,6 +111,7 @@ public class Tab1 extends Fragment {
         textView_TodayComment = (TextView) getActivity().findViewById(R.id.textViewTodayComment); // 오늘의 자세 코멘트
 
         DatabaseManager databaseManager = new DatabaseManager(getContext());
+        databaseManager.insertData("8",24,20,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("0",53,72,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("23",22,83,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("10",13,46,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
