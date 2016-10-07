@@ -121,7 +121,7 @@ public class Tab1 extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             isScreenVisible = true;
-            if(isViewCreated == true){
+            if(bt != null && bt.isBluetoothEnabled() && isViewCreated == true){
                 // 사용자가 이쪽을 보고 있고, 뷰가 생성된 적이 있으면 서비스와 바인드한다.
                 Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
                 getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
