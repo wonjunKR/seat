@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
+    final static String TAG = "ViewPageAdapter";
     CharSequence Titles[]; // This will Store the Titles of the Tabs which are Going to be passed when ViewPagerAdapter is created
     int NumbOfTabs; // Store the number of tabs, this will also be passed when the ViewPagerAdapter is created
 
@@ -23,19 +24,15 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         this.Titles = mTitles;
         this.NumbOfTabs = mNumbOfTabsumb;
-
     }
 
     //This method return the fragment for the every position in the View Pager
     @Override
     public Fragment getItem(int position) {
-
-        if (position == 0) // if the position is 0 we are returning the First tab
-        {
+        if (position == 0) { // if the position is 0 we are returning the First tab
             Tab1 tab1 = new Tab1();
             return tab1;
-        } else if (position == 1)            // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
-        {
+        } else if (position == 1) {           // As we are having 2 tabs if the position is now 0 it must be 1 so we are returning second tab
             Tab2 tab2 = new Tab2();
             return tab2;
         } else {
@@ -58,4 +55,5 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return NumbOfTabs;
     }
+
 }

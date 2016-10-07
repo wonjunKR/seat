@@ -25,11 +25,36 @@ public class Tab2 extends Fragment {
     Spinner spinnerGraphInterval;
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SharedPreferences prefs = this.getActivity().getSharedPreferences("SettingStatus", Context.MODE_PRIVATE);
         graphType = prefs.getString("prefGraphList","0");   // 그래프의 표현 방식 / 0 - 꺾은선 그래프 / 1 - 막대 그래프 / 디폴트는 꺾은선 그래프로 표시
         if(graphType.equals("")) graphType = "0";   // 이거는 세팅에 들어가서 아무것도 선택하지 않으면 ""이 들어가게 된다. 그럼 그래프가 제대로 안그려지더라. 아래 케이스 문에서
-        Log.d(TAG, "그래프 표현 방식 : " + graphType);
+        //Log.d(TAG, "그래프 표현 방식 : " + graphType);
 
         View v;
         if(graphType.equals("0")) { // 꺾은선 그래프
@@ -58,7 +83,7 @@ public class Tab2 extends Fragment {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 //그래프를 일, 월, 연 중에서 어떤 것으로 보여줄지..
                 String graphInterval = spinnerGraphInterval.getSelectedItem().toString();
-                Log.d(TAG, "graphInterval : " + graphInterval);
+                //Log.d(TAG, "graphInterval : " + graphInterval);
 
                 String[] labels;
                 int[] index;
@@ -163,11 +188,5 @@ public class Tab2 extends Fragment {
         });
         super.onActivityCreated(savedInstanceState);
         // 뷰에 데이터를 넣는 작업 등을 할 추가할 수 있음
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "onStart()");
-        super.onStart();
     }
 }

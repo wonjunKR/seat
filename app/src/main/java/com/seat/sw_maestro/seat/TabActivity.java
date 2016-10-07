@@ -52,9 +52,26 @@ public class TabActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numberOfTabs);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), Titles, numberOfTabs);  // 뷰 페이지 어댑터..
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
+
+        // 사용자가 어디 페이지를 보고 있는지 확인하기 위해.
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "보고있는 페이지 : " + position);
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
 

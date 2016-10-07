@@ -75,6 +75,12 @@ public class Tab1 extends Fragment {
             super.handleMessage(msg);
         }
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -92,6 +98,22 @@ public class Tab1 extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.tab_1,container,false);
 
@@ -100,7 +122,6 @@ public class Tab1 extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
         BluetoothSPP bt = new BluetoothSPP(getContext());
 
         textView_TodaySittingTime = (TextView) getActivity().findViewById(R.id.textViewTodaySittingTime);   // 오늘 앉은 시간

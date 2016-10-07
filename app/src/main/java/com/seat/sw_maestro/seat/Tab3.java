@@ -99,6 +99,27 @@ public class Tab3 extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_3, container, false);
 
@@ -107,14 +128,12 @@ public class Tab3 extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-
         BluetoothSPP bt = new BluetoothSPP(getContext());
         position = (TextView)getActivity().findViewById(R.id.position);
 
         // 어떤 자세인지 실시간으로 보여주기 위해서
         // service 연결 시도
         if(bt.isBluetoothEnabled()) {   // 블루투스가 켜져있을때만 바인드를 시도함.
-            Log.d(TAG, "연결 부분");
             Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
             getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
         }
