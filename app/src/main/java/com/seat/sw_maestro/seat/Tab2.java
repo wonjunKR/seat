@@ -41,6 +41,7 @@ public class Tab2 extends Fragment {
 
     @Override
     public void onStop() {
+        Log.d(TAG, "탭2 안보임");
         super.onStop();
     }
 
@@ -50,7 +51,18 @@ public class Tab2 extends Fragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.d(TAG,"이제 보인다 탭 2");
+        }else{
+
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "탭2");
         SharedPreferences prefs = this.getActivity().getSharedPreferences("SettingStatus", Context.MODE_PRIVATE);
         graphType = prefs.getString("prefGraphList","0");   // 그래프의 표현 방식 / 0 - 꺾은선 그래프 / 1 - 막대 그래프 / 디폴트는 꺾은선 그래프로 표시
         if(graphType.equals("")) graphType = "0";   // 이거는 세팅에 들어가서 아무것도 선택하지 않으면 ""이 들어가게 된다. 그럼 그래프가 제대로 안그려지더라. 아래 케이스 문에서

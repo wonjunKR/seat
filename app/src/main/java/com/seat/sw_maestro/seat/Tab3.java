@@ -26,6 +26,9 @@ public class Tab3 extends Fragment {
 
     private static final String TAG = "Tab3";
     private Messenger mRemote;  // 블루투스 서비스로부터 받아오는 메시지. 실시간 자세를 받아오기 위해서
+    BluetoothSPP bt;
+    boolean isScreenVisible = false;    // 사용자가 스크린을 보고있는지 확인하는 용도
+    boolean isViewCreated = false;  // 뷰가 생성되었는지 확인하는 용도. 사용자가 스크린을 이 페이지를 보게되면 서비스와 바인드하는데 뷰가 생성되지 않아서 체크용
 
     TextView position;
 
@@ -82,6 +85,23 @@ public class Tab3 extends Fragment {
             super.handleMessage(msg);
         }
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            isScreenVisible = true;
+            if(isViewCreated == true){
+                // 사용자가 이쪽을 보고 있고, 뷰가 생성된 적이 있으면 서비스와 바인드한다.
+                Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
+                getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
+            }
+        }
+        else{
+            isScreenVisible = false;
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -128,12 +148,15 @@ public class Tab3 extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        BluetoothSPP bt = new BluetoothSPP(getContext());
+        isViewCreated = true;   // 뷰가 생성되었음.
+
+        bt = new BluetoothSPP(getContext());
         position = (TextView)getActivity().findViewById(R.id.position);
 
         // 어떤 자세인지 실시간으로 보여주기 위해서
         // service 연결 시도
-        if(bt.isBluetoothEnabled()) {   // 블루투스가 켜져있을때만 바인드를 시도함.
+        if(bt.isBluetoothEnabled() && isScreenVisible == true) {   // 블루투스가 켜져있을때만 바인드를 시도함.
+            // 사용자가 이쪽을 보고 있고, 뷰가 생성된 적이 있으면 서비스와 바인드한다.
             Intent serviceIntent = new Intent(getContext(), BluetoothService.class);
             getActivity().bindService(serviceIntent, mConnection, Context.BIND_AUTO_CREATE);
         }

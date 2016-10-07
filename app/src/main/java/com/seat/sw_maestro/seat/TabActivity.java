@@ -56,6 +56,8 @@ public class TabActivity extends AppCompatActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(adapter);
 
+        pager.setOffscreenPageLimit(1); // 페이지를 몇 개를 미리 로딩할 것인가..? 좌우 한개씩만 로딩함 미리.
+
         // 사용자가 어디 페이지를 보고 있는지 확인하기 위해.
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -64,7 +66,7 @@ public class TabActivity extends AppCompatActivity {
             }
             @Override
             public void onPageSelected(int position) {
-                Log.d(TAG, "보고있는 페이지 : " + position);
+
             }
             @Override
             public void onPageScrollStateChanged(int state) {

@@ -70,12 +70,42 @@ public class BluetoothService extends Service {
             switch (msg.what) {
                 case 0 :
                     mRemote = (Messenger) msg.obj;
-                    Log.d(TAG, "탭 1과 연결되었음.");
+                    Log.d(TAG, "서비스와 탭1이 연결되었다.");
+
+                    // 탭 1과 연결된 경우 동작을 여기다 둔다.
+                    // Service -> Tab1 보냄
+                    // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
+                    TimerTask timerTask = new TimerTask() {
+                        public void run() {
+                            if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                                remoteSendMessage_Tab1("1"); // 연결되었다고 보내자.
+                            else
+                                remoteSendMessage_Tab1("0");
+                        }
+                    };
+                    Timer timer = new Timer();
+                    timer.schedule(timerTask, 1000, 3000);
+
                     break;
                 case 1 :
-                    Log.d(TAG, "탭 3와 연결되었음.");
                     mRemote = (Messenger) msg.obj;
+                    Log.d(TAG, "서비스와 탭3이 연결되었다.");
+
+                    // 탭 3과 연결된 경우 동작을 여기다 둔다.
+                    // Service -> Tab3 보냄
+                    // 자세의 결과를 보내준다.
+                    TimerTask timerTask2 = new TimerTask() {
+                        public void run() {
+                            if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                                remoteSendMessage_Tab3("연결상태 3으로 보낸다"); // 연결되었다고 보내자.
+                            else
+                                remoteSendMessage_Tab3("연결안댐 3으로 보낸다");
+                        }
+                    };
+                    Timer timer2 = new Timer();
+                    timer2.schedule(timerTask2, 1000, 1000);
                     break;
+
                 default :
                     Log.d(TAG, "등록되지 않은 곳에서 메시지가 옴");
                     break;
@@ -121,42 +151,13 @@ public class BluetoothService extends Service {
                 }
             }
         });
-
-        // Service -> Tab1 보냄
-        // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
-        TimerTask timerTask = new TimerTask() {
-            public void run() {
-                if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
-                    remoteSendMessage_Tab1("1"); // 연결되었다고 보내자.
-                else
-                    remoteSendMessage_Tab1("0");
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(timerTask, 1000, 3000);
-
-
-        // Service -> Tab3 보냄
-        // 자세의 결과를 보내준다.
-        TimerTask timerTask2 = new TimerTask() {
-            public void run() {
-                if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
-                    remoteSendMessage_Tab3("연결상태 3으로 보낸다"); // 연결되었다고 보내자.
-                else
-                    remoteSendMessage_Tab3("연결안댐 3으로 보낸다");
-            }
-        };
-        Timer timer2 = new Timer();
-        timer2.schedule(timerTask2, 1000, 3000);
-
-
-        Log.d(TAG,"서비스가 시작되었습니다.");
+        //Log.d(TAG,"서비스가 시작되었습니다.");
         super.onCreate();
     }
 
     @Override
     public void onDestroy() {
-        Log.d(TAG,"서비스가 종료되었습니다.");
+        //Log.d(TAG,"서비스가 종료되었습니다.");
         super.onDestroy();
         bt.stopService();
     }
