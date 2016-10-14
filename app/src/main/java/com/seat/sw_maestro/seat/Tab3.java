@@ -106,9 +106,10 @@ public class Tab3 extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         try{
+            Log.d(TAG, "서비스와 언바인드 탭3");
             getActivity().unbindService(mConnection);    // 서비스가 먼저 동작중인지 알아보고 언바인드 해야해
         } catch (IllegalArgumentException e){
-            Log.d(TAG, "서비스가 동작 안했는데 언바운드 함. 이게 문제가 될까...?");
+            Log.d(TAG, "서비스가 동작 안했는데 언바인드 함. 이게 문제가 될까...?");
         }
     }
 
