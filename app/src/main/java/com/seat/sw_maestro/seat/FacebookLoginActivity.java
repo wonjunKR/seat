@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class FacebookLoginActivity extends AppCompatActivity {
 
@@ -70,7 +71,14 @@ public class FacebookLoginActivity extends AppCompatActivity {
                 params[5] = facebookID;   // facebook ID
 
                 HTTPManager httpManager = new HTTPManager();
-                result = httpManager.useAPI(1,params);  // 사용자 정보 등록, 결과로 DB에 생성된 UserNumber를 받아온다.
+                try {
+                    result = httpManager.useAPI(1, params);  // 사용자 정보 등록, 결과로 DB에 생성된 UserNumber를 받아온다.
+                }catch (java.lang.NullPointerException e){
+                    Log.e(TAG, "네트워크가 꺼져서 서버로 못 보냄, 혹은 서버가 꺼져있음.");
+                    Toast.makeText(getApplicationContext(), "네트워크 상태를 확인해주세요. 혹은 서버 관리자에게 문의하세요.", Toast.LENGTH_LONG).show();
+                    return ;
+                }
+
                 Log.d(TAG, "사용자 정보 등록 : " + result);
 
                 // 로그인 정보를 저장하기 위한 sharedPreferences

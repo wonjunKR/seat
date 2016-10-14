@@ -57,7 +57,13 @@ public class LoginActivity extends AppCompatActivity {
                 params[0] = id;
 
                 HTTPManager httpManager = new HTTPManager();
-                result = httpManager.useAPI(10,params);  // 특정 계정 조회를 하는 API를 불러온다.
+                try {
+                    result = httpManager.useAPI(10, params);  // 특정 계정 조회를 하는 API를 불러온다.
+                }catch (java.lang.NullPointerException e){
+                    Log.e(TAG, "네트워크가 꺼져서 서버로 못 보냄, 혹은 서버가 꺼져있음.");
+                    Toast.makeText(getApplicationContext(), "네트워크 상태를 확인해주세요. 혹은 서버 관리자에게 문의하세요.", Toast.LENGTH_LONG).show();
+                    return ;
+                }
                 Log.d(TAG, "계정조회 결과 : " + result);   // 이미 입력한 아이디 있으면 계정정보 리턴, 없으면 -1
 
                 if (result.equals("-1")) {   // 아이디 없음.
