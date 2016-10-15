@@ -26,6 +26,7 @@ public class Perceptron {
             //Log.d(TAG, "weight : " + weights[i]);
         }
         */
+        // 여기서 자세에 따라서 학습된 그 결과값으로 초기화 시켜서 생성하면 되겠다. 인자를 하나 더 만들면 될듯.
         weights[0] = -1;
         weights[1] = 3;
     }

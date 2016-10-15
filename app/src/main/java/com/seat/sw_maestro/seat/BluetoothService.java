@@ -293,7 +293,7 @@ public class BluetoothService extends Service {
         Log.d(TAG, "언제 알림이 시작될 것인가? : " + calendar.getTime());
 
 
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);   // 알람 매니저
+        AlarmManager alarm = (AlarmManager) this. getSystemService(Context.ALARM_SERVICE);   // 알람 매니저
         Intent intent = new Intent(getApplication(), AlarmReceiver.class);  // 알람 리시버로 인텐트
         PendingIntent sender = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
 
@@ -304,6 +304,5 @@ public class BluetoothService extends Service {
         // 이게 진짜 실전용 1시간마다 동작하는 알람.
 
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초
-        //AlarmManager.INTERVAL_HOUR 1시간 간격??
     }
 }

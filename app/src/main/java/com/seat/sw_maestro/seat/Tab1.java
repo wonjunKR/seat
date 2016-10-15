@@ -164,12 +164,16 @@ public class Tab1 extends Fragment {
         textView_BarGauge2 = (TextView) getActivity().findViewById(R.id.textViewBarGauge2); // 정확도 게이지2
         textView_TodayComment = (TextView) getActivity().findViewById(R.id.textViewTodayComment); // 오늘의 자세 코멘트
 
+
         DatabaseManager databaseManager = new DatabaseManager(getContext());
+
+        /*
         databaseManager.insertData("8",24,20,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("0",53,72,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("23",22,83,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("10",13,46,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
         databaseManager.insertData("8",4,66,databaseManager.getCurrentDay()); // 임시로 데이터 넣기 나중에 지워
+        */
 
         // 앉은 시간 세팅 부분
         int sittingTime = databaseManager.getSittingTime_OneDay(databaseManager.getCurrentDay());   // 오늘 하루 앉은 시간 받아옴. 분으로
