@@ -23,6 +23,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
     이 서비스에서는 주기적으로 방석으로 데이터를 보낸다. (실시간모드 or 일반모드)
     각 모드가 보내지는 경우는 다음과 같다.
 
+    방석상태모드 - 사용자가 Tab1(방석연결상태)을 보고 있을 때
     실시간모드 - 사용자가 Tab3(실시간)을 보고 있을 때
     일반모드 - 그 외의 경우
 
@@ -34,8 +35,6 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
     몇 번 데이터를 받았는지 카운트하여, 1시간동안 몇 분을 앉아있었는지 체크한다.
     그 카운트된 시점마다 정확도를 분석하여, 카운트 된 동안의 평균을 구한다. 점수도 구함.
     DB에 넣는다. 현재시간, 정확도, 점수, 현재 날짜.
-
-    매 정각 실행되는 그것을 만들어보자.
 */
 
 public class BluetoothService extends Service {
@@ -45,7 +44,11 @@ public class BluetoothService extends Service {
     BluetoothSPP bt;
     private Messenger mRemote;  // 서비스와 액티비티 간에 통신을 하기 위해서 쓰는 메신저
     Timer timer;    // 일정시간마다 일을 하기 위해서 .. 타이머
-    private AlarmManager alarmManager;  // 매 정각 일을 하기위해...
+
+    int serviceState = 0;   // 서비스의 상태. 값은 아래를 보세요.
+    private static final int STATE_COMMON = 0;  // 일반모드
+    private static final int STATE_TAB1 = 1;    // Tab1을 보는 상태
+    private static final int STATE_TAB3 = 2;    // Tab3를 보는 상태
 
     // 생성자
     BluetoothService(){
@@ -96,60 +99,111 @@ public class BluetoothService extends Service {
         }
     }
 
+
     // Service handler 추가  액티비티 -> 서비스로 받아오는 경우.
     private class RemoteHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+
+            // 일반모드
+            TimerTask timerTask_Common = new TimerTask() {
+                public void run() { // 일반모드에서 어떻게 동작하는지
+                    Log.d(TAG, "TimerTask_Common 실행 됨");
+                }
+            };
+
+            // 탭 1과 연결된 경우 동작을 여기다 둔다.
+            // Service -> Tab1 보냄
+            // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
+            TimerTask timerTask_Tab1 = new TimerTask() {
+                public void run() {
+                    Log.d(TAG, "TimerTask_Tab1 실행 됨");
+                    Log.d(TAG, "현재 상태 : " + serviceState);
+                    if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                        remoteSendMessage_Tab1("1"); // 연결되었다고 보내자.
+                    else
+                        remoteSendMessage_Tab1("0");
+                }
+            };
+
+            // 탭 3과 연결된 경우 동작을 여기다 둔다.
+            // Service -> Tab3 보냄
+            // 자세의 결과를 보내준다.
+            TimerTask timerTask_Tab3 = new TimerTask() {
+                public void run() {
+                    Log.d(TAG, "TimerTask_Tab3 실행 됨");
+                    Log.d(TAG, "현재 상태 : " + serviceState);
+                    if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                        remoteSendMessage_Tab3("자세의 결과"); // 연결되었다고 보내자.
+                    else
+                        remoteSendMessage_Tab3("자세의 결과");
+                }
+            };
+
             switch (msg.what) {
-                case 0 :
-                    mRemote = (Messenger) msg.obj;
+                case 0 :    // Tab1을 보는 경우.
                     Log.d(TAG, "서비스와 탭1이 연결되었다.");
+                    serviceState = STATE_TAB1;
+                    mRemote = (Messenger) msg.obj;
 
                     if(timer != null){  // 기존 타이머에 등록됬던 것 다 삭제
                         timer.cancel();
                         timer = null;
                     }
 
-                    // 탭 1과 연결된 경우 동작을 여기다 둔다.
-                    // Service -> Tab1 보냄
-                    // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
-                    TimerTask timerTask = new TimerTask() {
-                        public void run() {
-                            Log.d(TAG, "TimerTask 1 실행 됨");
-                            if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
-                                remoteSendMessage_Tab1("1"); // 연결되었다고 보내자.
-                            else
-                                remoteSendMessage_Tab1("0");
-                        }
-                    };
-
                     timer = new Timer();
-                    timer.schedule(timerTask, 1000, 3000);  // 1초 후 3초마다 실행
+                    timer.schedule(timerTask_Tab1, 1000, 3000);  // Tab1전용 task를 1초 후 3초마다 실행
                     break;
 
-                case 1 :
-                    mRemote = (Messenger) msg.obj;
+                case 1 :    // Tab3를 보는 경우
                     Log.d(TAG, "서비스와 탭3이 연결되었다.");
+                    serviceState = STATE_TAB3;
+                    mRemote = (Messenger) msg.obj;
 
                     if(timer != null){  // 기존 타이머에 등록됬던 것 다 삭제
                         timer.cancel();
                         timer = null;
                     }
 
-                    // 탭 3과 연결된 경우 동작을 여기다 둔다.
-                    // Service -> Tab3 보냄
-                    // 자세의 결과를 보내준다.
-                    TimerTask timerTask2 = new TimerTask() {
-                        public void run() {
-                            Log.d(TAG, "TimerTask 2 실행 됨");
-                            if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
-                                remoteSendMessage_Tab3("자세의 결과"); // 연결되었다고 보내자.
-                            else
-                                remoteSendMessage_Tab3("자세의 결과");
-                        }
-                    };
                     timer = new Timer();
-                    timer.schedule(timerTask2, 1000, 1000);
+                    timer.schedule(timerTask_Tab3, 1000, 1000); // Tab3전용 task를 1초 후 1초마다 실행
+                    break;
+
+                case 2 :    // Tab1이 화면에서 사라짐
+                    Log.d(TAG, "Tab1에서 끝났다 신호 보냄.");
+                    // Tab1에서 끝났다는 것은, Tab1이 화면에서 사라짐. -> 홈으로 갔거나, Tab3를 본다...
+                    // 타이머를 없애려면..
+
+                    // 만약 Tab3를 보는 경우라면 serviceState가 Tab3로 먼저 바뀐다.
+                    // 그래서 아래서 Tab1과 비교하는 것이다. 그대로 Tab1인 경우에는 홈화면으로 간 것이니까.
+                    // 비교를 안하면 Tab3 새로운 타이머가 등록되었는데 그것을 삭제해버림.
+
+                    if((timer != null) && (serviceState == STATE_TAB1)){  // 기존 타이머에 등록됬던 것 다 삭제
+                        timer.cancel();
+                        timer = null;
+
+                        // 여기로 들어온 경우에는 홈 화면을 보는 것이다. 타이머 일반모드 실행시켜야함.
+                        // 서비스의 동작을 일반모드로 변경
+                        timer = new Timer();
+                        timer.schedule(timerTask_Common, 1000, 1000);   // 일반모드 실행
+                        serviceState = STATE_COMMON;
+                    }
+                    break;
+
+                case 3 :
+                    Log.d(TAG, "Tab3에서 끝났다 신호 보냄.");
+                    // Tab1에서 끝났다는 것은, Tab1이 화면에서 사라짐. -> 홈으로 갔거나, Tab3를 본다...
+                    // 타이머를 없애려면..
+                    if((timer != null) && (serviceState == STATE_TAB3)){  // 기존 타이머에 등록됬던 것 다 삭제
+                        timer.cancel();
+                        timer = null;
+
+                        // 여기로 들어온 경우에는 홈 화면을 보는 것이다. 타이머 일반모드 실행시켜야함.
+                        // 서비스의 동작을 일반모드로 변경
+                        timer = new Timer();
+                        timer.schedule(timerTask_Common, 1000, 1000);   // 일반모드 실행
+                        serviceState = STATE_COMMON;
+                    }
                     break;
 
                 default :
@@ -199,6 +253,20 @@ public class BluetoothService extends Service {
         });
         //Log.d(TAG,"서비스가 시작되었습니다.");
 
+
+
+        // 서비스가 생성될 때는 TimerTask를 일반모드로 생성한다.
+        // 일반모드
+        TimerTask timerTask_Common = new TimerTask() {
+            public void run() { // 일반모드에서 어떻게 동작하는지
+                Log.d(TAG, "TimerTask_Common 실행 됨");
+            }
+        };
+
+        timer = new Timer();
+        timer.schedule(timerTask_Common, 1000, 1000);   // 일반모드 실행
+        serviceState = STATE_COMMON;
+
         setAlarm(); // 서비스가 실행될 때 알람을 실행한다. 1시간마다 실행하며 값을 정산해서 DB에 넣는 부분.
         super.onCreate();
     }
@@ -227,6 +295,5 @@ public class BluetoothService extends Service {
 
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초
         //AlarmManager.INTERVAL_HOUR 1시간 간격??
-
     }
 }

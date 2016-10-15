@@ -102,15 +102,21 @@ public class Tab3 extends Fragment {
         }
     }
 
+    public void remoteSendMessage_Service() {    // 서비스로 메시지 전달. Tab3을 종료함
+        if (mRemote != null) {
+            Message msg = new Message();
+            msg.what = 3;   // 3번은 Tab3 종료 메시지
+            try {
+                mRemote.send(msg);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try{
-            Log.d(TAG, "서비스와 언바인드 탭3");
-            getActivity().unbindService(mConnection);    // 서비스가 먼저 동작중인지 알아보고 언바인드 해야해
-        } catch (IllegalArgumentException e){
-            Log.d(TAG, "서비스가 동작 안했는데 언바인드 함. 이게 문제가 될까...?");
-        }
     }
 
     @Override
@@ -127,6 +133,13 @@ public class Tab3 extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        try{
+            Log.d(TAG, "서비스와 언바인드 탭3");
+            remoteSendMessage_Service();    // 종료될 때 서비스한테 그만 본다고 알려줌.
+            getActivity().unbindService(mConnection);    // 서비스가 먼저 동작중인지 알아보고 언바인드 해야해
+        } catch (IllegalArgumentException e){
+            Log.d(TAG, "서비스가 동작 안했는데 언바인드 함. 이게 문제가 될까...?");
+        }
     }
 
     @Override
