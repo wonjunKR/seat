@@ -108,7 +108,7 @@ public class BluetoothService extends Service {
             // 일반모드
             TimerTask timerTask_Common = new TimerTask() {
                 public void run() { // 일반모드에서 어떻게 동작하는지
-                    Log.d(TAG, "TimerTask_Common 실행 됨");
+                    //Log.d(TAG, "TimerTask_Common 실행 됨");
                 }
             };
 
@@ -117,8 +117,8 @@ public class BluetoothService extends Service {
             // 주기적으로 방석의 상태를 보내주는 일을 한다. 이것을 안하면 바뀌는 순간에만 텍스트뷰를 바꾸니... 바뀐 순간에 그 화면을 안보면 안바꿔짐
             TimerTask timerTask_Tab1 = new TimerTask() {
                 public void run() {
-                    Log.d(TAG, "TimerTask_Tab1 실행 됨");
-                    Log.d(TAG, "현재 상태 : " + serviceState);
+                    //Log.d(TAG, "TimerTask_Tab1 실행 됨");
+                    //Log.d(TAG, "현재 상태 : " + serviceState);
                     if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
                         remoteSendMessage_Tab1("1"); // 연결되었다고 보내자.
                     else
@@ -131,8 +131,8 @@ public class BluetoothService extends Service {
             // 자세의 결과를 보내준다.
             TimerTask timerTask_Tab3 = new TimerTask() {
                 public void run() {
-                    Log.d(TAG, "TimerTask_Tab3 실행 됨");
-                    Log.d(TAG, "현재 상태 : " + serviceState);
+                    //Log.d(TAG, "TimerTask_Tab3 실행 됨");
+                    //Log.d(TAG, "현재 상태 : " + serviceState);
                     if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
                         remoteSendMessage_Tab3("자세의 결과"); // 연결되었다고 보내자.
                     else
@@ -259,7 +259,7 @@ public class BluetoothService extends Service {
         // 일반모드
         TimerTask timerTask_Common = new TimerTask() {
             public void run() { // 일반모드에서 어떻게 동작하는지
-                Log.d(TAG, "TimerTask_Common 실행 됨");
+                //Log.d(TAG, "TimerTask_Common 실행 됨");
             }
         };
 
@@ -281,16 +281,26 @@ public class BluetoothService extends Service {
     public void setAlarm(){
         Log.d(TAG, "알람이 설정");
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 10); // 현재 시간으로부터 10초 뒤
+        Log.d(TAG, "지금 시간 : " + calendar.getTime());
+
+        //테스트용
+        //calendar.add(Calendar.HOUR, +8);
+        //Log.d(TAG, "내가 지정한 시간 : " + calendar.getTime());
+
+        calendar.add(Calendar.HOUR, + 1); // 서비스가 시작된 시간으로부터 1시간 뒤(다음 정각)
+        calendar.set(Calendar.MINUTE, 0); // 다음 정각 0분에
+        calendar.set(Calendar.SECOND, 30); // 초는 30초로 (혹시모를 오류.. 더 빨리 실행해버리면 꼬이니까)
+        Log.d(TAG, "언제 알림이 시작될 것인가? : " + calendar.getTime());
+
 
         AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);   // 알람 매니저
         Intent intent = new Intent(getApplication(), AlarmReceiver.class);  // 알람 리시버로 인텐트
         PendingIntent sender = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
 
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 1 * 5 * 1000, sender);
+        //alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 1 * 5 * 1000, sender);
         // 위는 테스트용, 인자는 시간타입, 언제 실행할 건가?, 간격은?, 인텐트. 5초마다 AlarmReceiver 실행.
 
-        //alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 60 * 60 * 1000, sender);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 60 * 60 * 1000, sender);
         // 이게 진짜 실전용 1시간마다 동작하는 알람.
 
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초
