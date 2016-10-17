@@ -39,16 +39,23 @@ public class SettingActivity extends PreferenceActivity {
         }
         */
 
+        /*
         // 데이터베이스 테스트
         DatabaseManager databaseManager = new DatabaseManager(this);
 
         String date = databaseManager.getCurrentDay();  // 현재의 날짜. 타입 -yyyyMMdd
         String timeLine = databaseManager.getCurrentHour(); // 현재의 시간. 타입 - HH
         // 데이터 추가하기
-        databaseManager.insertData(timeLine, 30, 40, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData(timeLine, 10, 20, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData(timeLine, 20, 30, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData(timeLine, 40, 50, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData(timeLine, 50, 60, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
 
-
-
+        databaseManager.insertData("18", 10, 20, "20161017");    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData("18", 20, 30, "20161017");    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData("19", 40, 50, "20161017");    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        databaseManager.insertData("20", 50, 60, "20161017");    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+        */
 
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 

@@ -1,6 +1,7 @@
 package com.seat.sw_maestro.seat;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -108,51 +109,69 @@ public class DatabaseManager {
         db.execSQL(sql);
         */
 
+        // 데이터베이스 카운트를 저장하기 위한 sharedPreferences
+        SharedPreferences prefs = context.getSharedPreferences("sittingData", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        int lastCount = prefs.getInt("lastCount",0);    //해당 시간에 데이터가 몇 번 받았는지 저장하는 count
+        String lastTimeLine = prefs.getString("lastTimeLine", "-1");    // 가장 마지막에 들어온 timeLine 저장
+
+        //Log.d(TAG, "수정이전 카운트 값 : " + prefs.getInt("lastCount",0));
+
+        if(!lastTimeLine.equals(timeLine)){  // timeLine이 다음으로 넘어갔다면...
+            editor.putString("lastTimeLine", timeLine); // 마지막의 timeLine 방금 받은 데이터로 갱신
+            editor.putInt("lastCount", 1);  // 카운트 값 초기화
+            editor.commit();
+
+        }else{  // 넘어가지 않았다면 카운트 값만 증가
+            editor.putInt("lastCount", lastCount + 1);
+            editor.commit();
+        }
+
+        //Log.d(TAG, "수정된 카운트 값 : " + prefs.getInt("lastCount",0));
+
         String sql_count = "SELECT count(*) FROM " + tableName + " WHERE Date = " + date + " AND timeLine = " + timeLine + ";";
         //Log.d(TAG, "sql : " + sql_count);
         Cursor result_count = db.rawQuery(sql_count, null);
 
         if(result_count.moveToFirst()){
             int count = result_count.getInt(0);
-            Log.d(TAG, "조회 결과 개수 : " + count);
+            //Log.d(TAG, "조회 결과 개수 : " + count);
             if(count == 0){ // 이미 해당 날짜와 TimeLine에 데이터가 있는지 조회해보고, 없다면 새로 추가한다.
                 String sql = "insert into " + tableName + " values( NULL," + timeLine + ", "
                         + sittingTime + ", " + accuracy + ", "
                         + date + ");";
                 db.execSQL(sql);
             }else{ // 있다면 값을 수정해서 올린다.
-                Log.d(TAG, "이미 데이터는 들어있음. 수정이 필요함");
+                //Log.d(TAG, "이미 데이터는 들어있음. 수정이 필요함");
+                lastCount = prefs.getInt("lastCount",0);    // 이 값은 1이 더해진 값이다. 위에서 올렸음.
+
+                int current_accuracy = getAccuracy(timeLine,date);  // 디비에 저장되어있는 정확도의 평균
+                //Log.d(TAG, "바꾸기 전 정확도 : " + current_accuracy);
+
+                int newAccuracy = current_accuracy * (lastCount - 1);    // 누적 정확도는 평균 * 받았던 수
+                newAccuracy = newAccuracy + accuracy; // 누적 정확도에 방금 들어온 정확도를 더하고,
+                newAccuracy = newAccuracy / lastCount; // 새로운 정확도를 구한다.
+                //Log.d(TAG, "새로운 정확도 : " + newAccuracy);
+
+                int currentSittingTime = getSittingTime(timeLine,date);
+                //Log.d(TAG, "바꾸기 전 앉은시간 : " + currentSittingTime);
+                int newSittingTime = currentSittingTime + sittingTime;
+                //Log.d(TAG, "새로운 앉은시간 : " + newSittingTime);
+
+                // 새롭게 값을 수정하는 부분
+                String sql_update = "UPDATE " + tableName + " SET Accuracy = " + newAccuracy
+                        + ", SittingTime = " + newSittingTime + " WHERE Date = " + date + " AND TimeLine = " + timeLine;
+                //Log.d(TAG, "update sql : " + sql_update);
+                db.execSQL(sql_update);
             }
         }
 
         result_count.close();
-        /*
-        // 정확도의 경우에는 앉은 시간과는 다르게 평균을 내야한다. 그래서 가져온 더한 값을 나눠줘야겠지?
-        int accuracy_OneDay = 0;
-        int count = 1;
-
-        String sql_sum = "select sum(Accuracy) AS 'sumOfAccuracy' from " + tableName + " where Date = " + date + ";";
-        String sql_count = "SELECT count(Accuracy) FROM " + tableName + " WHERE Date = " + date + ";";
-        Cursor result_sum = db.rawQuery(sql_sum, null);
-        Cursor result_count = db.rawQuery(sql_count, null);
-
-        if(result_sum.moveToFirst()){
-            accuracy_OneDay = result_sum.getInt(0);
-        }
-
-        if(result_count.moveToFirst()){
-            count = result_count.getInt(0);
-            if(count == 0)  // 개수가 없는 경우에 한에서는 1로 나누기로 한다. 어짜피 분모가 0이니까 0이 나오겠지만.. 0으로 나누는 오류를 제거하기 위해
-                count = 1;
-            //Log.d(TAG, "카운트 값 : " + count);
-        }
-
-        result_sum.close();
-        result_count.close();
-
-        return accuracy_OneDay/count;
-        */
     }
+
+
+
 
     // 데이터 검색
     public void selectData() {
