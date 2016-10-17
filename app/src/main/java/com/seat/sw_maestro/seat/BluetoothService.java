@@ -190,7 +190,7 @@ public class BluetoothService extends Service {
                     }
                     break;
 
-                case 3 :
+                case 3 :    // Tab3가 화면에서 사라짐
                     Log.d(TAG, "Tab3에서 끝났다 신호 보냄.");
                     // Tab1에서 끝났다는 것은, Tab1이 화면에서 사라짐. -> 홈으로 갔거나, Tab3를 본다...
                     // 타이머를 없애려면..

@@ -101,10 +101,57 @@ public class DatabaseManager {
 
     // 데이터 추가   인자 순서 기억!!
     public void insertData(String timeLine, int sittingTime, int accuracy, String date){
+        /* 원본
         String sql = "insert into " + tableName + " values( NULL," + timeLine + ", "
                 + sittingTime + ", " + accuracy + ", "
                 + date + ");";
         db.execSQL(sql);
+        */
+
+        String sql_count = "SELECT count(*) FROM " + tableName + " WHERE Date = " + date + " AND timeLine = " + timeLine + ";";
+        //Log.d(TAG, "sql : " + sql_count);
+        Cursor result_count = db.rawQuery(sql_count, null);
+
+        if(result_count.moveToFirst()){
+            int count = result_count.getInt(0);
+            Log.d(TAG, "조회 결과 개수 : " + count);
+            if(count == 0){ // 이미 해당 날짜와 TimeLine에 데이터가 있는지 조회해보고, 없다면 새로 추가한다.
+                String sql = "insert into " + tableName + " values( NULL," + timeLine + ", "
+                        + sittingTime + ", " + accuracy + ", "
+                        + date + ");";
+                db.execSQL(sql);
+            }else{ // 있다면 값을 수정해서 올린다.
+                Log.d(TAG, "이미 데이터는 들어있음. 수정이 필요함");
+            }
+        }
+
+        result_count.close();
+        /*
+        // 정확도의 경우에는 앉은 시간과는 다르게 평균을 내야한다. 그래서 가져온 더한 값을 나눠줘야겠지?
+        int accuracy_OneDay = 0;
+        int count = 1;
+
+        String sql_sum = "select sum(Accuracy) AS 'sumOfAccuracy' from " + tableName + " where Date = " + date + ";";
+        String sql_count = "SELECT count(Accuracy) FROM " + tableName + " WHERE Date = " + date + ";";
+        Cursor result_sum = db.rawQuery(sql_sum, null);
+        Cursor result_count = db.rawQuery(sql_count, null);
+
+        if(result_sum.moveToFirst()){
+            accuracy_OneDay = result_sum.getInt(0);
+        }
+
+        if(result_count.moveToFirst()){
+            count = result_count.getInt(0);
+            if(count == 0)  // 개수가 없는 경우에 한에서는 1로 나누기로 한다. 어짜피 분모가 0이니까 0이 나오겠지만.. 0으로 나누는 오류를 제거하기 위해
+                count = 1;
+            //Log.d(TAG, "카운트 값 : " + count);
+        }
+
+        result_sum.close();
+        result_count.close();
+
+        return accuracy_OneDay/count;
+        */
     }
 
     // 데이터 검색

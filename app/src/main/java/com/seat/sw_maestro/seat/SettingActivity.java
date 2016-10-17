@@ -39,6 +39,17 @@ public class SettingActivity extends PreferenceActivity {
         }
         */
 
+        // 데이터베이스 테스트
+        DatabaseManager databaseManager = new DatabaseManager(this);
+
+        String date = databaseManager.getCurrentDay();  // 현재의 날짜. 타입 -yyyyMMdd
+        String timeLine = databaseManager.getCurrentHour(); // 현재의 시간. 타입 - HH
+        // 데이터 추가하기
+        databaseManager.insertData(timeLine, 30, 40, date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
+
+
+
+
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 
         ListPreference listPreference = (ListPreference) findPreference("prefGraphList");   // 그래프 관련

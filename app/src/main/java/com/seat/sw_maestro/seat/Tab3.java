@@ -16,9 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.Date;
+import android.widget.ImageView;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 
@@ -30,7 +28,8 @@ public class Tab3 extends Fragment {
     boolean isScreenVisible = false;    // 사용자가 스크린을 보고있는지 확인하는 용도
     boolean isViewCreated = false;  // 뷰가 생성되었는지 확인하는 용도. 사용자가 스크린을 이 페이지를 보게되면 서비스와 바인드하는데 뷰가 생성되지 않아서 체크용
 
-    TextView position;
+    //TextView position;
+    ImageView position;
 
     private ServiceConnection mConnection = new ServiceConnection() {   // 서비스와 핸들러를 연결해주는 부분
         @Override
@@ -165,7 +164,8 @@ public class Tab3 extends Fragment {
         isViewCreated = true;   // 뷰가 생성되었음.
 
         bt = new BluetoothSPP(getContext());
-        position = (TextView)getActivity().findViewById(R.id.position);
+        //position = (TextView)getActivity().findViewById(R.id.position);
+        position = (ImageView)getActivity().findViewById(R.id.position);
 
         // 어떤 자세인지 실시간으로 보여주기 위해서
         // service 연결 시도
@@ -179,7 +179,16 @@ public class Tab3 extends Fragment {
     }
 
     public void setPosition(){
-        String test = new java.text.SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-        position.setText(test);
+        //String test = new java.text.SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+        //position.setText(test);
+        int position_number = 1;
+
+        if(position_number != 0) {
+            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_left));
+            position_number = 1;
+        }else if(position_number == 1){
+            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_left));
+            position_number = 0;
+        }
     }
 }
