@@ -3,6 +3,7 @@ package com.seat.sw_maestro.seat;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -16,12 +17,21 @@ import java.util.Queue;
  */
 public class AlarmReceiver extends BroadcastReceiver {
     final static String TAG = "AlarmReceiver";
+
     Queue queue_sittingTime = new LinkedList();
     Queue queue_accuracy = new LinkedList();
+    Queue queue_timeLine = new LinkedList();
+    Queue queue_date = new LinkedList();
+
+    DatabaseManager databaseManager;
+    Context globalContext;
+
+    int test = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO Auto-generated method stub
+        globalContext = context;
 
         //Log.d(TAG, "정각이 되었다!!!");
 
@@ -33,7 +43,7 @@ public class AlarmReceiver extends BroadcastReceiver {
          */
 
         // 가장 최근의 데이터를 가져와야 할 것이다. 예) 11시 3분에 실행됬다면 10(TimeLine)의 데이터, 00시 2분에 실행됬다면 전날의 23의 데이터
-        DatabaseManager databaseManager = new DatabaseManager(context);
+        databaseManager = new DatabaseManager(context);
         Calendar calendar = Calendar.getInstance();
         String timeLine;
         String date;
@@ -67,28 +77,54 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "서버로 날릴 TimeLine : " + timeLine);
         Log.d(TAG, "서버로 날릴 Date : " + date);
 
-        //queue_sittingTime.offer(sittingTime);
-        //queue_accuracy.offer(accuracy);
+        // 서버에 보낼 것을 큐에 담는다.
+        queue_sittingTime.offer(databaseManager.getSittingTime(timeLine,date));
+        queue_accuracy.offer(databaseManager.getAccuracy(timeLine,date));
+        queue_date.offer(date);
+        queue_timeLine.offer(timeLine);
 
-
-
-        /*
-        // 데이터베이스에 값을 넣는다.
-        DatabaseManager databaseManager = new DatabaseManager(context);
-
-        Calendar calendar = Calendar.getInstance();
-
-        int sittingTime = calendar.get(calendar.SECOND);// 여기도 일단은 초로. 앉은 시간이 들어가야함
-        int accuracy = calendar.get(calendar.MINUTE);   // 일단은 테스트로 현재 분을 넣는다. 정확도가 들어가야함
-
-        String date = databaseManager.getCurrentDay();  // 현재의 날짜. 타입 -yyyyMMdd
-        String timeLine = databaseManager.getCurrentHour(); // 현재의 시간. 타입 - HH
-
-        // 데이터 추가하기
-        databaseManager.insertData(timeLine,sittingTime,accuracy,date);    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
-        */
+        sendToServer();
     }
 
+    public void sendToServer(){
+        while(!queue_date.isEmpty()) {
+            // 데이터 등록 - mode = 5, params[0~4] = 유저아이디, 타임라인, 앉은시간, 정확도, 날짜
+            HTTPManager httpManager = new HTTPManager();
+            String params[] = new String[5];
+
+            // 로그인 정보를 저장하기 위한 sharedPreferences
+            SharedPreferences prefs = globalContext.getSharedPreferences("UserStatus", globalContext.MODE_PRIVATE);
+
+            test++;
+
+            params[0] = prefs.getString("UserNumber", "-1");
+            params[1] = queue_timeLine.peek().toString();
+            //params[2] = queue_sittingTime.peek().toString();
+            params[2] = String.valueOf(test);
+            params[3] = queue_accuracy.peek().toString();
+            params[4] = queue_date.peek().toString();
+
+            Log.d(TAG, "UserNumber : " + params[0]);
+            Log.d(TAG, "timeLine : " + params[1]);
+            Log.d(TAG, "sittingTime : " + params[2]);
+            Log.d(TAG, "accuracy : " + params[3]);
+            Log.d(TAG, "date : " + params[4]);
+
+            try {
+                httpManager.useAPI(5, params);
+                // 성공하면 큐에서 뺀다.
+                Log.d(TAG, "통신 성공");
+                queue_timeLine.poll();
+                queue_sittingTime.poll();
+                queue_accuracy.poll();
+                queue_date.poll();
+
+            } catch (java.lang.NullPointerException e) {
+                Log.e(TAG, "네트워크가 꺼져서 서버로 못 보냄, 혹은 서버가 꺼져있음.");
+                return;
+            }
+        }
+    }
 }
 
 
