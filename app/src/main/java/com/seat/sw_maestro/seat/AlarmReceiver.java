@@ -85,6 +85,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         }else{  // 정각이 아닌 경우
             // timeLine
             int tempTimeLine = calendar.get(Calendar.HOUR);  // 현재 시간을 int로 구함
+            //Log.d(TAG, "AM or PM" + calendar.get(Calendar.AM_PM));
+
+            if(calendar.get(Calendar.AM_PM) == 1){  // PM인 경우에는 12를 더해준다. 1은 PM
+                tempTimeLine = tempTimeLine + 12;
+            }
+
             tempTimeLine = tempTimeLine - 1;    // 하나 빼서 이전 시간을 구한다.
             timeLine = String.valueOf(tempTimeLine);    // String으로 변환
 
@@ -97,6 +103,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "서버로 날릴 Date : " + date);
 
         int count = queue_count.getInt("count", 0); // 카운트를 임시로 빼온다. 없으면 0
+
+        //Log.d(TAG, "중요 count : " + count);
+        //Log.d(TAG, "중요 sittingTime : " + databaseManager.getSittingTime(timeLine,date));
+        //Log.d(TAG, "중요 accuracy : " + databaseManager.getAccuracy(timeLine,date));
 
         editor_sittingTime.putInt(String.valueOf(count),databaseManager.getSittingTime(timeLine,date));
         editor_accuracy.putInt(String.valueOf(count),databaseManager.getAccuracy(timeLine,date));
@@ -132,6 +142,10 @@ public class AlarmReceiver extends BroadcastReceiver {
             params[2] = String.valueOf(queue_sittingTime.getInt(String.valueOf(count),-1));
             params[3] = String.valueOf(queue_accuracy.getInt(String.valueOf(count),-1));
             params[4] = queue_date.getString(String.valueOf(count),"-1");
+
+            //Log.d(TAG, "중요2 count : " + count);
+            //Log.d(TAG, "중요2 sittingTime : " + queue_sittingTime.getInt(String.valueOf(count), -1));
+            //Log.d(TAG, "중요2 accuracy : " + queue_accuracy.getInt(String.valueOf(count),-1));
 
             Log.d(TAG, "UserNumber : " + params[0]);
             Log.d(TAG, "timeLine : " + params[1]);

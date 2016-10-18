@@ -293,8 +293,6 @@ public class BluetoothService extends Service {
         calendar.set(Calendar.SECOND, 30); // 초는 30초로 (혹시모를 오류.. 더 빨리 실행해버리면 꼬이니까)
         Log.d(TAG, "언제 알림이 시작될 것인가? : " + calendar.getTime());
 
-
-
         AlarmManager alarm = (AlarmManager) this. getSystemService(Context.ALARM_SERVICE);   // 알람 매니저
         Intent intent = new Intent(getApplication(), AlarmReceiver.class);  // 알람 리시버로 인텐트
         PendingIntent sender = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);

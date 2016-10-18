@@ -57,6 +57,11 @@ public class SettingActivity extends PreferenceActivity {
         databaseManager.insertData("20", 50, 60, "20161017");    // 인자로 현재 시간, 앉은시간(분), 정확도(퍼센트 인트), 현재날짜
         */
 
+        //SharedPreferences queue_accuracy = getSharedPreferences("accuracy", MODE_PRIVATE);
+        //Log.d(TAG, "테스트 : " + queue_accuracy.getInt("1",-1));
+        //DatabaseManager databaseManager = new DatabaseManager(this);
+        //Log.d(TAG, "테스트2 : " + databaseManager.getAccuracy("19","20161018"));
+
         Toast.makeText(getApplicationContext(), "일부 설정은 앱을 재시작하면 적용됩니다.", Toast.LENGTH_LONG).show();
 
         ListPreference listPreference = (ListPreference) findPreference("prefGraphList");   // 그래프 관련
