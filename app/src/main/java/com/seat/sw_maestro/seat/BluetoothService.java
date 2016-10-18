@@ -251,7 +251,7 @@ public class BluetoothService extends Service {
                 }
             }
         });
-        //Log.d(TAG,"서비스가 시작되었습니다.");
+        Log.d(TAG,"서비스가 시작되었습니다.");
 
 
 
@@ -273,7 +273,7 @@ public class BluetoothService extends Service {
 
     @Override
     public void onDestroy() {
-        //Log.d(TAG,"서비스가 종료되었습니다.");
+        Log.d(TAG,"서비스가 종료되었습니다.");
         super.onDestroy();
         bt.stopService();
     }
@@ -288,9 +288,9 @@ public class BluetoothService extends Service {
         //Log.d(TAG, "내가 지정한 시간 : " + calendar.getTime());
 
         // 테스트 끝나면 여기 주석 지우자
-        //calendar.add(Calendar.HOUR, + 1); // 서비스가 시작된 시간으로부터 1시간 뒤(다음 정각)
-        //calendar.set(Calendar.MINUTE, 0); // 다음 정각 0분에
-        //calendar.set(Calendar.SECOND, 30); // 초는 30초로 (혹시모를 오류.. 더 빨리 실행해버리면 꼬이니까)
+        calendar.add(Calendar.HOUR, + 1); // 서비스가 시작된 시간으로부터 1시간 뒤(다음 정각)
+        calendar.set(Calendar.MINUTE, 0); // 다음 정각 0분에
+        calendar.set(Calendar.SECOND, 30); // 초는 30초로 (혹시모를 오류.. 더 빨리 실행해버리면 꼬이니까)
         Log.d(TAG, "언제 알림이 시작될 것인가? : " + calendar.getTime());
 
 
@@ -299,10 +299,10 @@ public class BluetoothService extends Service {
         Intent intent = new Intent(getApplication(), AlarmReceiver.class);  // 알람 리시버로 인텐트
         PendingIntent sender = PendingIntent.getBroadcast(getApplication(), 0, intent, 0);
 
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 1 * 30 * 1000, sender);
+        //alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 1 * 30 * 1000, sender);
         // 위는 테스트용, 인자는 시간타입, 언제 실행할 건가?, 간격은?, 인텐트. 5초마다 AlarmReceiver 실행.
 
-        //alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 60 * 60 * 1000, sender);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 60 * 60 * 1000, sender);
         // 이게 진짜 실전용 1시간마다 동작하는 알람.
 
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초

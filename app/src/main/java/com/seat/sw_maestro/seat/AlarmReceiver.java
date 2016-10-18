@@ -9,8 +9,6 @@ import android.util.Log;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.Queue;
 
 /**
  * Created by JiYun on 2016. 10. 14..
@@ -18,20 +16,38 @@ import java.util.Queue;
 public class AlarmReceiver extends BroadcastReceiver {
     final static String TAG = "AlarmReceiver";
 
-    Queue queue_sittingTime = new LinkedList();
-    Queue queue_accuracy = new LinkedList();
-    Queue queue_timeLine = new LinkedList();
-    Queue queue_date = new LinkedList();
+    SharedPreferences queue_sittingTime;
+    SharedPreferences queue_accuracy;
+    SharedPreferences queue_timeLine;
+    SharedPreferences queue_date;
+    SharedPreferences queue_count;
+
+    SharedPreferences.Editor editor_sittingTime;
+    SharedPreferences.Editor editor_accuracy;
+    SharedPreferences.Editor editor_timeLine;
+    SharedPreferences.Editor editor_date;
+    SharedPreferences.Editor editor_count;
 
     DatabaseManager databaseManager;
     Context globalContext;
-
-    int test = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO Auto-generated method stub
         globalContext = context;
+
+        // sharedPreference를 큐처럼 쓴다.
+        queue_sittingTime = globalContext.getSharedPreferences("sittingTime", globalContext.MODE_PRIVATE);
+        queue_accuracy = globalContext.getSharedPreferences("accuracy", globalContext.MODE_PRIVATE);
+        queue_timeLine = globalContext.getSharedPreferences("timeLine", globalContext.MODE_PRIVATE);
+        queue_date = globalContext.getSharedPreferences("date", globalContext.MODE_PRIVATE);
+        queue_count = globalContext.getSharedPreferences("count", globalContext.MODE_PRIVATE);
+
+        editor_sittingTime = queue_sittingTime.edit();
+        editor_accuracy = queue_accuracy.edit();
+        editor_timeLine = queue_timeLine.edit();
+        editor_date = queue_date.edit();
+        editor_count = queue_count.edit();
 
         //Log.d(TAG, "정각이 되었다!!!");
 
@@ -47,6 +63,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         String timeLine;
         String date;
+
+        // 테스트용 나중에 지워
+        databaseManager.insertData(databaseManager.getCurrentHour(),calendar.get(Calendar.MINUTE),calendar.get(Calendar.HOUR),databaseManager.getCurrentDay());
 
         //calendar.set(2016, 10, 1, 00, 34, 56);  // 테스트용
         //Log.d(TAG, "현재 날짜 : " + calendar.getTime());
@@ -77,32 +96,42 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d(TAG, "서버로 날릴 TimeLine : " + timeLine);
         Log.d(TAG, "서버로 날릴 Date : " + date);
 
-        // 서버에 보낼 것을 큐에 담는다.
-        queue_sittingTime.offer(databaseManager.getSittingTime(timeLine,date));
-        queue_accuracy.offer(databaseManager.getAccuracy(timeLine,date));
-        queue_date.offer(date);
-        queue_timeLine.offer(timeLine);
+        int count = queue_count.getInt("count", 0); // 카운트를 임시로 빼온다. 없으면 0
+
+        editor_sittingTime.putInt(String.valueOf(count),databaseManager.getSittingTime(timeLine,date));
+        editor_accuracy.putInt(String.valueOf(count),databaseManager.getAccuracy(timeLine,date));
+        editor_date.putString(String.valueOf(count),date);
+        editor_timeLine.putString(String.valueOf(count),timeLine);
+        editor_count.putInt("count",count + 1); //카운트 값 증가
+
+        editor_sittingTime.commit();
+        editor_accuracy.commit();
+        editor_date.commit();
+        editor_timeLine.commit();
+        editor_count.commit();
 
         sendToServer();
     }
 
     public void sendToServer(){
-        while(!queue_date.isEmpty()) {
+        while(queue_count.getInt("count",-1) != 0) {
+
+            int count = queue_count.getInt("count", 0); // 카운트를 임시로 빼온다. 없으면 0
+            Log.d(TAG, "큐에 개수 : " + count);
+            count = count - 1;  // 1을 빼는 이유는 카운트 값이 1일 때 그 값들은 0에 들어가있음 (배열이라 생각)
+
             // 데이터 등록 - mode = 5, params[0~4] = 유저아이디, 타임라인, 앉은시간, 정확도, 날짜
             HTTPManager httpManager = new HTTPManager();
             String params[] = new String[5];
 
             // 로그인 정보를 저장하기 위한 sharedPreferences
-            SharedPreferences prefs = globalContext.getSharedPreferences("UserStatus", globalContext.MODE_PRIVATE);
+            SharedPreferences prefs_user = globalContext.getSharedPreferences("UserStatus", globalContext.MODE_PRIVATE);
 
-            test++;
-
-            params[0] = prefs.getString("UserNumber", "-1");
-            params[1] = queue_timeLine.peek().toString();
-            //params[2] = queue_sittingTime.peek().toString();
-            params[2] = String.valueOf(test);
-            params[3] = queue_accuracy.peek().toString();
-            params[4] = queue_date.peek().toString();
+            params[0] = prefs_user.getString("UserNumber", "-1");
+            params[1] = queue_timeLine.getString(String.valueOf(count),"-1");
+            params[2] = String.valueOf(queue_sittingTime.getInt(String.valueOf(count),-1));
+            params[3] = String.valueOf(queue_accuracy.getInt(String.valueOf(count),-1));
+            params[4] = queue_date.getString(String.valueOf(count),"-1");
 
             Log.d(TAG, "UserNumber : " + params[0]);
             Log.d(TAG, "timeLine : " + params[1]);
@@ -114,10 +143,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 httpManager.useAPI(5, params);
                 // 성공하면 큐에서 뺀다.
                 Log.d(TAG, "통신 성공");
-                queue_timeLine.poll();
-                queue_sittingTime.poll();
-                queue_accuracy.poll();
-                queue_date.poll();
+                editor_count.putInt("count",count); // 여기서 1을 안빼도 되는 이유는 위에서 뺐다.
+                editor_count.commit();
 
             } catch (java.lang.NullPointerException e) {
                 Log.e(TAG, "네트워크가 꺼져서 서버로 못 보냄, 혹은 서버가 꺼져있음.");
