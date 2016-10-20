@@ -3,6 +3,9 @@
     android:textSize="16dp"
     android:padding="10dp"
     android:text="test"
+    android:textStyle="bold"
+    android:textColor="#455A64"
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
+<!-- 여기는 대시보드에 나오는 일 월 연 스피너 -->
