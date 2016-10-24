@@ -20,15 +20,11 @@ public class Perceptron {
 
         weights = new float[n]; // Weights start off random.
 
-        /*
+
         for (int i = 0; i < weights.length; i++) {
             weights[i] = generator.nextFloat()*2 - 1;   // -1~0.9999 까지의 난수를 생성
-            //Log.d(TAG, "weight : " + weights[i]);
+            Log.d(TAG, "weight : " + weights[i]);
         }
-        */
-        // 여기서 자세에 따라서 학습된 그 결과값으로 초기화 시켜서 생성하면 되겠다. 인자를 하나 더 만들면 될듯.
-        weights[0] = -1;
-        weights[1] = 3;
     }
 
     /*
@@ -66,9 +62,10 @@ public class Perceptron {
     void train(float[] inputs, int desired) {   // Train the network against known data.
         float guess = feedforward(inputs);    // 내 모델에서 예상해서 나온 값
         float error = desired - guess;      // 실제 결과와의 차이를 구한다.
+
         for (int i = 0; i < weights.length; i++) {
             weights[i] += c * error * inputs[i];    // 결과와의 차이를 이용해서 가중치를 새롭게 갱신한다.
-            Log.d(TAG, "가중치 변화 : " + i + " - " + weights[i]);
+            //Log.d(TAG, i + " : " + weights[i]);
         }
     }
 

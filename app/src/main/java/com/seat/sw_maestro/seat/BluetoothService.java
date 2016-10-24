@@ -227,7 +227,7 @@ public class BluetoothService extends Service {
         bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
                     // Do something when data incoming
-                    // Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
+                    Log.d(TAG, "블루투스 데이터 받았다 -> " + message);
                     //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
                     //bt.send("1",true);
             }
