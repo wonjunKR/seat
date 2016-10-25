@@ -12,5 +12,12 @@
        android:layout_weight="1"
        android:text="자세는 이러이러하다"
        android:textSize="20pt"/>
+   <TextView
+       android:id="@+id/position2"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1"
+       android:text="자세는"
+       android:textSize="20pt"/>
 </LinearLayout>
 

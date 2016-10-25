@@ -1,7 +1,5 @@
 package com.seat.sw_maestro.seat;
 
-import android.util.Log;
-
 import java.util.Random;
 
 /**
@@ -23,7 +21,7 @@ public class Perceptron {
 
         for (int i = 0; i < weights.length; i++) {
             weights[i] = generator.nextFloat()*2 - 1;   // -1~0.9999 까지의 난수를 생성
-            Log.d(TAG, "weight : " + weights[i]);
+            //Log.d(TAG, "weight : " + weights[i]);
         }
     }
 

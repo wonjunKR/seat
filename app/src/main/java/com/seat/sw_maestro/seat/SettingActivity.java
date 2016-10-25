@@ -32,60 +32,65 @@ public class SettingActivity extends PreferenceActivity {
         perceptron4 = new Perceptron(9);
         perceptron5 = new Perceptron(9);
 
-        // 0.877	-9.245	2.963	-65.73	-56.37	-1.167	63.44	-0.0217	1.854
-        perceptron1.weights[0] = (float) 0.877;
-        perceptron1.weights[1] = (float) -9.245;
-        perceptron1.weights[2] = (float) 2.963;
-        perceptron1.weights[3] = (float) -65.73;
-        perceptron1.weights[4] = (float) -56.37;
-        perceptron1.weights[5] = (float) -1.167;
-        perceptron1.weights[6] = (float) 63.44;
-        perceptron1.weights[7] = (float) -0.0217;
-        perceptron1.weights[8] = (float) 1.854;
-        //-0.911	-3.423	2.678	8.603	-0.607	-11.25	7.134	-7.373	-1.49
-        perceptron2.weights[0] = (float) -0.911;
-        perceptron2.weights[1] = (float) -3.423;
-        perceptron2.weights[2] = (float) 2.678;
-        perceptron2.weights[3] = (float) 8.603;
-        perceptron2.weights[4] = (float) -0.607;
-        perceptron2.weights[5] = (float) -11.25;
-        perceptron2.weights[6] = (float) 7.134;
-        perceptron2.weights[7] = (float) -7.373;
-        perceptron2.weights[8] = (float) -1.49;
-        //-14.05	2.23	-7.38	4.89	9.09	6.64	-10.81	-8.56	8.8
-        perceptron3.weights[0] = (float) -14.05;
-        perceptron3.weights[1] = (float) 2.23;
-        perceptron3.weights[2] = (float) -7.38;
-        perceptron3.weights[3] = (float) 4.89;
-        perceptron3.weights[4] = (float) 9.09;
-        perceptron3.weights[5] = (float) 6.64;
-        perceptron3.weights[6] = (float) -10.84;
-        perceptron3.weights[7] = (float) -8.56;
-        perceptron3.weights[8] = (float) 8.8;
-        //-11.79	-0.86	-32.63	-10	-4.83	5.49	-5.05	32.78	-4.37
-        perceptron4.weights[0] = (float) -11.79;
-        perceptron4.weights[1] = (float) -0.86;
-        perceptron4.weights[2] = (float) -32.63;
-        perceptron4.weights[3] = (float) -10;
-        perceptron4.weights[4] = (float) -4.83;
-        perceptron4.weights[5] = (float) 5.49;
-        perceptron4.weights[6] = (float) -5.05;
-        perceptron4.weights[7] = (float) 32.78;
-        perceptron4.weights[8] = (float) -4.37;
-        //4.32	10.96	23.89	-33.78	-19.25	-12.42	-16.34	21.56	-0.459
-        perceptron5.weights[0] = (float) 4.32;
-        perceptron5.weights[1] = (float) 10.96;
-        perceptron5.weights[2] = (float) 23.89;
-        perceptron5.weights[3] = (float) -33.78;
-        perceptron5.weights[4] = (float) -19.25;
-        perceptron5.weights[5] = (float) -12.42;
-        perceptron5.weights[6] = (float) -16.34;
-        perceptron5.weights[7] = (float) 21.56;
-        perceptron5.weights[8] = (float) -0.459;
+
+        // 1111111111111111111111
+        // -1.29	-4.56	0.475	-13.803	-8.553	-1.134	7.945	9.411	1.5944
+        perceptron1.weights[0] = (float) -1.29;
+        perceptron1.weights[1] = (float) -4.56;
+        perceptron1.weights[2] = (float) 0.475;
+        perceptron1.weights[3] = (float) -13.803;
+        perceptron1.weights[4] = (float) -8.553;
+        perceptron1.weights[5] = (float) -1.134;
+        perceptron1.weights[6] = (float) 7.945;
+        perceptron1.weights[7] = (float) 9.411;
+        perceptron1.weights[8] = (float) 1.5944;
+        //-0.063	-1.508	-0.8172	5.765	0.7297	-5.76	4.73	-3.13	-3.07
+        perceptron2.weights[0] = (float) -0.063;
+        perceptron2.weights[1] = (float) -1.508;
+        perceptron2.weights[2] = (float) -0.8172;
+        perceptron2.weights[3] = (float) 5.765;
+        perceptron2.weights[4] = (float) 0.7297;
+        perceptron2.weights[5] = (float) -5.76;
+        perceptron2.weights[6] = (float) 4.73;
+        perceptron2.weights[7] = (float) -3.13;
+        perceptron2.weights[8] = (float) -3.07;
+        //-6.971	1.698	-0.397	-0.249	1.058	3.573	-6.608	-3.224	6.282
+        perceptron3.weights[0] = (float) -6.971;
+        perceptron3.weights[1] = (float) 1.698;
+        perceptron3.weights[2] = (float) -0.397;
+        perceptron3.weights[3] = (float) -0.249;
+        perceptron3.weights[4] = (float) 1.058;
+        perceptron3.weights[5] = (float) 3.573;
+        perceptron3.weights[6] = (float) -6.608;
+        perceptron3.weights[7] = (float) -3.224;
+        perceptron3.weights[8] = (float) 6.282;
+        //-0.6376	4.043	-4.448	0.2408	-0.7218	1.321	0.094	0.4255	-4.001
+        perceptron4.weights[0] = (float) -0.6376;
+        perceptron4.weights[1] = (float) 4.043;
+        perceptron4.weights[2] = (float) -4.448;
+        perceptron4.weights[3] = (float) 0.2408;
+        perceptron4.weights[4] = (float) -0.7218;
+        perceptron4.weights[5] = (float) 1.321;
+        perceptron4.weights[6] = (float) 0.094;
+        perceptron4.weights[7] = (float) 0.4255;
+        perceptron4.weights[8] = (float) -4.001;
+        //2.76	0.1593	1.5971	-1.565	0.0531	0.5649	-3.134	-0.5655	1.9782
+        perceptron5.weights[0] = (float) 2.76;
+        perceptron5.weights[1] = (float) 0.1593;
+        perceptron5.weights[2] = (float) 1.5971;
+        perceptron5.weights[3] = (float) -1.565;
+        perceptron5.weights[4] = (float) 0.0531;
+        perceptron5.weights[5] = (float) 0.5649;
+        perceptron5.weights[6] = (float) -3.134;
+        perceptron5.weights[7] = (float) -0.5655;
+        perceptron5.weights[8] = (float) 1.9782;
 
         float [][]fArray;
         DataUtils dataUtils = new DataUtils();
         fArray = dataUtils.readInputsFromFile(getApplicationContext()); // 인풋 파일 읽어오고...
+
+        int error_count = 0;
+
         for(int i =0;i<500;i++){
             float result1 = perceptron1.feedforward(fArray[i]);
             float result2 = perceptron2.feedforward(fArray[i]);
@@ -94,28 +99,62 @@ public class SettingActivity extends PreferenceActivity {
             float result5 = perceptron5.feedforward(fArray[i]);
 
             Log.d(TAG, i+1 + "번째 데이터 예측");
-            Log.d(TAG, "자세 1 확률 : " + result1);
-            Log.d(TAG, "자세 2 확률 : " + result2);
-            Log.d(TAG, "자세 3 확률 : " + result3);
-            Log.d(TAG, "자세 4 확률 : " + result4);
-            Log.d(TAG, "자세 5 확률 : " + result5);
+
+            float[] input = new float[5];
+            input[0] = result1;
+            input[1] = result2;
+            input[2] = result3;
+            input[3] = result4;
+            input[4] = result5;
+            Log.d(TAG, "이 자세는 " + (getMax(input) + 1) + "번 자세입니다.");
+            if(((i/100) + 1) != (getMax(input) + 1)) error_count++;
+
+            //Log.d(TAG, "자세 1 확률 : " + result1);
+            //Log.d(TAG, "자세 2 확률 : " + result2);
+            //Log.d(TAG, "자세 3 확률 : " + result3);
+            //Log.d(TAG, "자세 4 확률 : " + result4);
+            //Log.d(TAG, "자세 5 확률 : " + result5);
         }
 
+        Log.d(TAG, "에러 카운트 : " + error_count);
+
+        float [][] test;
+        test = new float[10][9];
+        // 0.14,0,0.18,0.34,0.22,0.46,0.62,0.68,0.8
+        // 0.18,0.2,0.26,0.38,0.22,0.48,0.66,0.72,0.8
+        test[0][0] = (float)0.18;
+        test[0][1] = (float)0.2;
+        test[0][2] = (float)0.28;
+        test[0][3] = (float)0.38;
+        test[0][4] = (float)0.22;
+        test[0][5] = (float)0.48;
+        test[0][6] = (float)0.66;
+        test[0][7] = (float)0.72;
+        test[0][8] = (float)0.8;
+
+        Log.d(TAG, "테스트 결과 1 : " + perceptron1.feedforward(test[0]));
+        Log.d(TAG, "테스트 결과 2 : " + perceptron2.feedforward(test[0]));
+        Log.d(TAG, "테스트 결과 3 : " + perceptron3.feedforward(test[0]));
+        Log.d(TAG, "테스트 결과 4 : " + perceptron4.feedforward(test[0]));
+        Log.d(TAG, "테스트 결과 5 : " + perceptron5.feedforward(test[0]));
+        // 1111111111111111111111
+
+
+
         /*
-        // -7.61	-8.02	-0.607	36.5	-20.12	-5.47	27.56	14.11	0.788
-        perceptron1.weights[0] = (float) -7.61;
-        perceptron1.weights[1] = (float) -8.02;
-        perceptron1.weights[2] = (float) -0.607;
-        perceptron1.weights[3] = (float) 36.5;
-        perceptron1.weights[4] = (float) -20.12;
-        perceptron1.weights[5] = (float) -5.47;
-        perceptron1.weights[6] = (float) 27.56;
-        perceptron1.weights[7] = (float) 14.11;
-        perceptron1.weights[8] = (float) 0.788;
-        */
+        // 22222222222222222222222
+        // -5.231	1.2477	0.1274	-0.4975	0.5438	2.934	-5.5332	-2.428	5.504
+        perceptron1.weights[0] = (float) -5.231;
+        perceptron1.weights[1] = (float) 1.2477;
+        perceptron1.weights[2] = (float) 0.1274;
+        perceptron1.weights[3] = (float) -0.4975;
+        perceptron1.weights[4] = (float) 0.5438;
+        perceptron1.weights[5] = (float) 2.934;
+        perceptron1.weights[6] = (float) -5.5322;
+        perceptron1.weights[7] = (float) -2.428;
+        perceptron1.weights[8] = (float) 5.504;
 
 
-        /* 학습 예제
         float [][]fArray;
         int []iArray;
         DataUtils dataUtils = new DataUtils();
@@ -124,7 +163,7 @@ public class SettingActivity extends PreferenceActivity {
 
         //Log.d(TAG, "학습 전 예측 : " + perceptron.feedforward(fArray[0]));
 
-        for(int j = 0; j<2000; j++) {
+        for(int j = 0; j<5; j++) {
             for (int i = 0; i < 500; i++) {
                 perceptron1.train(fArray[i], iArray[i]);  // 학습을 돌려보장
                 //perceptron1.train(fArray[i],iArray[i]);  // 학습을 돌려보장
@@ -153,8 +192,10 @@ public class SettingActivity extends PreferenceActivity {
                 sum = 0;
             }
         }
-        */
 
+        Log.d(TAG,"정상테스트5");
+        // 22222222222222222222222
+        */
 
 
         /*
@@ -210,5 +251,18 @@ public class SettingActivity extends PreferenceActivity {
 
         onPreferenceChangeListener.onPreferenceChange(mPreference,
                 PreferenceManager.getDefaultSharedPreferences(mPreference.getContext()).getString(mPreference.getKey(), ""));
+    }
+
+    public int getMax(float[] input){
+        int maxIndex = 0;
+        float max = 0;
+
+        for(int i = 0; i < input.length; i++){
+            if(input[i] > max){ // 여러개 인풋 중에서 가장 컸던 부분의 인덱스를 리턴한다. input[0]~[5] -> 0~5 리턴
+                max = input[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
 }

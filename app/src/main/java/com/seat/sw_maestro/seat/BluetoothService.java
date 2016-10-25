@@ -40,7 +40,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothState;
 public class BluetoothService extends Service {
 
     private static final String TAG = "BluetoothService";
-    private static final String SeatName = "wonjun";    // 방석의 블루투스 이름을 입력한다.
+    private static final String SeatName = "wnjungod";    // 방석의 블루투스 이름을 입력한다.
     BluetoothSPP bt;
     private Messenger mRemote;  // 서비스와 액티비티 간에 통신을 하기 위해서 쓰는 메신저
     Timer timer;    // 일정시간마다 일을 하기 위해서 .. 타이머
@@ -49,6 +49,12 @@ public class BluetoothService extends Service {
     private static final int STATE_COMMON = 0;  // 일반모드
     private static final int STATE_TAB1 = 1;    // Tab1을 보는 상태
     private static final int STATE_TAB3 = 2;    // Tab3를 보는 상태
+
+    Perceptron perceptron0;
+    Perceptron perceptron1;
+    Perceptron perceptron2;
+    Perceptron perceptron3;
+    Perceptron perceptron4;
 
     // 생성자
     BluetoothService(){
@@ -131,12 +137,8 @@ public class BluetoothService extends Service {
             // 자세의 결과를 보내준다.
             TimerTask timerTask_Tab3 = new TimerTask() {
                 public void run() {
-                    //Log.d(TAG, "TimerTask_Tab3 실행 됨");
-                    //Log.d(TAG, "현재 상태 : " + serviceState);
-                    if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
-                        remoteSendMessage_Tab3("자세의 결과"); // 연결되었다고 보내자.
-                    else
-                        remoteSendMessage_Tab3("자세의 결과");
+                    Log.d(TAG, "TimerTask_Tab3 실행 됨");
+                    Log.d(TAG, "현재 상태 : " + serviceState);
                 }
             };
 
@@ -152,7 +154,7 @@ public class BluetoothService extends Service {
                     }
 
                     timer = new Timer();
-                    timer.schedule(timerTask_Tab1, 1000, 3000);  // Tab1전용 task를 1초 후 3초마다 실행
+                    timer.schedule(timerTask_Tab1, 1000, 2000);  // Tab1전용 task를 1초 후 2초마다 실행
                     break;
 
                 case 1 :    // Tab3를 보는 경우
@@ -167,6 +169,50 @@ public class BluetoothService extends Service {
 
                     timer = new Timer();
                     timer.schedule(timerTask_Tab3, 1000, 1000); // Tab3전용 task를 1초 후 1초마다 실행
+
+                    Log.d(TAG, "리스너를 등록한다");
+                    // 블루투스 리스너
+                    bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+                        public void onDataReceived(byte[] data, String message) {
+                            // Do something when data incoming
+                            Log.d(TAG, "실시간용 데이터 받았다 -> " + message);
+
+                            //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
+                            //bt.send("1",true);
+
+
+                            String[] input_string = new String[9];
+                            input_string = message.split(",");
+
+                            int[] input_int = new int[9];
+                            float[] input_float = new float[9];
+                            for(int i = 0; i < 9; i++){
+                                input_int[i] = Integer.parseInt(input_string[i]);
+                                input_float[i] = ((float)input_int[i]/(float)100);
+                            }
+
+                            float[] positionProbability = new float[5];
+                            positionProbability[0] = perceptron0.feedforward(input_float);
+                            positionProbability[1] = perceptron1.feedforward(input_float);
+                            positionProbability[2] = perceptron2.feedforward(input_float);
+                            positionProbability[3] = perceptron3.feedforward(input_float);
+                            positionProbability[4] = perceptron4.feedforward(input_float);
+
+                            Log.d(TAG, "0번 자세 확률 : " + positionProbability[0]);
+                            Log.d(TAG, "1번 자세 확률 : " + positionProbability[1]);
+                            Log.d(TAG, "2번 자세 확률 : " + positionProbability[2]);
+                            Log.d(TAG, "3번 자세 확률 : " + positionProbability[3]);
+                            Log.d(TAG, "4번 자세 확률 : " + positionProbability[4]);
+
+                            int positionResult = getMax(positionProbability);
+
+                            if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
+                                remoteSendMessage_Tab3(String.valueOf(positionResult)); // 자세의 결과를 보냄
+                            else
+                                remoteSendMessage_Tab3("-1");   // 블루투스 연결이 안되어있음
+                        }
+                    });
+
                     break;
 
                 case 2 :    // Tab1이 화면에서 사라짐
@@ -215,6 +261,64 @@ public class BluetoothService extends Service {
 
     @Override
     public void onCreate() {
+
+        //* 알고리즘
+        perceptron0 = new Perceptron(9);
+        perceptron1 = new Perceptron(9);
+        perceptron2 = new Perceptron(9);
+        perceptron3 = new Perceptron(9);
+        perceptron4 = new Perceptron(9);
+
+        // -1.29	-4.56	0.475	-13.803	-8.553	-1.134	7.945	9.411	1.5944
+        perceptron0.weights[0] = (float) -1.29;
+        perceptron0.weights[1] = (float) -4.56;
+        perceptron0.weights[2] = (float) 0.475;
+        perceptron0.weights[3] = (float) -13.803;
+        perceptron0.weights[4] = (float) -8.553;
+        perceptron0.weights[5] = (float) -1.134;
+        perceptron0.weights[6] = (float) 7.945;
+        perceptron0.weights[7] = (float) 9.411;
+        perceptron0.weights[8] = (float) 1.5944;
+        //-0.063	-1.508	-0.8172	5.765	0.7297	-5.76	4.73	-3.13	-3.07
+        perceptron1.weights[0] = (float) -0.063;
+        perceptron1.weights[1] = (float) -1.508;
+        perceptron1.weights[2] = (float) -0.8172;
+        perceptron1.weights[3] = (float) 5.765;
+        perceptron1.weights[4] = (float) 0.7297;
+        perceptron1.weights[5] = (float) -5.76;
+        perceptron1.weights[6] = (float) 4.73;
+        perceptron1.weights[7] = (float) -3.13;
+        perceptron1.weights[8] = (float) -3.07;
+        //-6.971	1.698	-0.397	-0.249	1.058	3.573	-6.608	-3.224	6.282
+        perceptron2.weights[0] = (float) -6.971;
+        perceptron2.weights[1] = (float) 1.698;
+        perceptron2.weights[2] = (float) -0.397;
+        perceptron2.weights[3] = (float) -0.249;
+        perceptron2.weights[4] = (float) 1.058;
+        perceptron2.weights[5] = (float) 3.573;
+        perceptron2.weights[6] = (float) -6.608;
+        perceptron2.weights[7] = (float) -3.224;
+        perceptron2.weights[8] = (float) 6.282;
+        //-0.6376	4.043	-4.448	0.2408	-0.7218	1.321	0.094	0.4255	-4.001
+        perceptron3.weights[0] = (float) -0.6376;
+        perceptron3.weights[1] = (float) 4.043;
+        perceptron3.weights[2] = (float) -4.448;
+        perceptron3.weights[3] = (float) 0.2408;
+        perceptron3.weights[4] = (float) -0.7218;
+        perceptron3.weights[5] = (float) 1.321;
+        perceptron3.weights[6] = (float) 0.094;
+        perceptron3.weights[7] = (float) 0.4255;
+        perceptron3.weights[8] = (float) -4.001;
+        //2.76	0.1593	1.5971	-1.565	0.0531	0.5649	-3.134	-0.5655	1.9782
+        perceptron4.weights[0] = (float) 2.76;
+        perceptron4.weights[1] = (float) 0.1593;
+        perceptron4.weights[2] = (float) 1.5971;
+        perceptron4.weights[3] = (float) -1.565;
+        perceptron4.weights[4] = (float) 0.0531;
+        perceptron4.weights[5] = (float) 0.5649;
+        perceptron4.weights[6] = (float) -3.134;
+        perceptron4.weights[7] = (float) -0.5655;
+        perceptron4.weights[8] = (float) 1.9782;
 
         bt = new BluetoothSPP(getApplicationContext());
 
@@ -304,5 +408,18 @@ public class BluetoothService extends Service {
         // 이게 진짜 실전용 1시간마다 동작하는 알람.
 
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초
+    }
+
+    public int getMax(float[] input){
+        int maxIndex = 0;
+        float max = 0;
+
+        for(int i = 0; i < input.length; i++){
+            if(input[i] > max){ // 여러개 인풋 중에서 가장 컸던 부분의 인덱스를 리턴한다. input[0]~[5] -> 0~5 리턴
+                max = input[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
     }
 }

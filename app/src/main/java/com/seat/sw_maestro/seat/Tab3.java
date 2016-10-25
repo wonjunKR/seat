@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 
@@ -28,7 +29,7 @@ public class Tab3 extends Fragment {
     boolean isScreenVisible = false;    // 사용자가 스크린을 보고있는지 확인하는 용도
     boolean isViewCreated = false;  // 뷰가 생성되었는지 확인하는 용도. 사용자가 스크린을 이 페이지를 보게되면 서비스와 바인드하는데 뷰가 생성되지 않아서 체크용
 
-    //TextView position;
+    TextView position2;
     ImageView position;
 
     private ServiceConnection mConnection = new ServiceConnection() {   // 서비스와 핸들러를 연결해주는 부분
@@ -74,11 +75,30 @@ public class Tab3 extends Fragment {
                         해당 탭이 이동될 때 바인드가 정상적으로 바뀌어야함.
                         그런데 지금 탭3 -> 탭2 -> 탭1로 가는 경우에는 정상적으로 안되는 상황이 발생함. - 해결필요
                      */
-                    setPosition();
+                    position2.setText(msg.obj.toString() + "번 자세입니다");
+                    switch(msg.obj.toString()){
+                        case "0":
+                            position2.setText("정자세입니다");
+                            break;
+                        case "1":
+                            position2.setText("왼쪽으로쏠림");
+                            break;
+                        case "2":
+                            position2.setText("오른쪽으로쏠림");
+                            break;
+                        case "3":
+                            position2.setText("오른쪽다리를 꼼");
+                            break;
+                        case "4":
+                            position2.setText("왼쪽다리를 꼼");
+                            break;
+                    }
+
                     break;
                 default:
                     // 나머지는 무시
                     //Log.d(TAG,"등록되지 않은 곳에서 메시지가 옴 : " + msg.obj.toString());
+                    position2.setText("블루투스를 연결해주세요.");
                     break;
             }
             super.handleMessage(msg);
@@ -164,7 +184,7 @@ public class Tab3 extends Fragment {
         isViewCreated = true;   // 뷰가 생성되었음.
 
         bt = new BluetoothSPP(getContext());
-        //position = (TextView)getActivity().findViewById(R.id.position);
+        position2 = (TextView)getActivity().findViewById(R.id.position2);
         position = (ImageView)getActivity().findViewById(R.id.position);
 
         // 어떤 자세인지 실시간으로 보여주기 위해서
@@ -179,8 +199,10 @@ public class Tab3 extends Fragment {
     }
 
     public void setPosition(){
-        //String test = new java.text.SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-        //position.setText(test);
+
+        position2.setText("할루");
+
+
         int position_number = 1;
 
         if(position_number != 0) {
@@ -191,4 +213,6 @@ public class Tab3 extends Fragment {
             position_number = 0;
         }
     }
+
+
 }
