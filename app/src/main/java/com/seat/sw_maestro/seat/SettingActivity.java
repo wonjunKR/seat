@@ -19,6 +19,7 @@ public class SettingActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.setting);
         Log.d(TAG, "SettingActivity");
 
+        /*
         //* 알고리즘 테스트
         Perceptron perceptron1;
         Perceptron perceptron2;
@@ -138,7 +139,7 @@ public class SettingActivity extends PreferenceActivity {
         Log.d(TAG, "테스트 결과 4 : " + perceptron4.feedforward(test[0]));
         Log.d(TAG, "테스트 결과 5 : " + perceptron5.feedforward(test[0]));
         // 1111111111111111111111
-
+        */
 
 
         /*
@@ -251,18 +252,5 @@ public class SettingActivity extends PreferenceActivity {
 
         onPreferenceChangeListener.onPreferenceChange(mPreference,
                 PreferenceManager.getDefaultSharedPreferences(mPreference.getContext()).getString(mPreference.getKey(), ""));
-    }
-
-    public int getMax(float[] input){
-        int maxIndex = 0;
-        float max = 0;
-
-        for(int i = 0; i < input.length; i++){
-            if(input[i] > max){ // 여러개 인풋 중에서 가장 컸던 부분의 인덱스를 리턴한다. input[0]~[5] -> 0~5 리턴
-                max = input[i];
-                maxIndex = i;
-            }
-        }
-        return maxIndex;
     }
 }

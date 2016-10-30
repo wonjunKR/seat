@@ -1,9 +1,15 @@
 package com.seat.sw_maestro.seat;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.text.DateFormat;
@@ -120,6 +126,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         editor_timeLine.commit();
         editor_count.commit();
 
+        notification(databaseManager.getSittingTime(timeLine,date), databaseManager.getAccuracy(timeLine,date));
         sendToServer();
     }
 
@@ -165,6 +172,32 @@ public class AlarmReceiver extends BroadcastReceiver {
                 return;
             }
         }
+    }
+
+    public void notification(int sittingTime, int accuracy){    // 매 정각 보여주는 notification
+        //알림(Notification)을 관리하는 NotificationManager 얻어오기
+        NotificationManager manager= (NotificationManager)globalContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        //알림(Notification)을 만들어내는 Builder 객체 생성
+        //만약 minimum SDK가 API 11 이상이면 Notification 클래스 사용 가능
+        //한번에 여러개의 속성 설정 가능
+        NotificationCompat.Builder builder= new NotificationCompat.Builder(globalContext)
+                .setSmallIcon(R.drawable.ic_launcher)  //상태표시줄에 보이는 아이콘 모양
+                .setTicker("자세의 결과를 확인하세요!")                  //알림이 발생될 때 잠시 보이는 글씨
+                .setContentTitle("최근 1시간 동안의 자세")                                //알림창에서의 제목
+                .setStyle(new NotificationCompat.BigTextStyle().bigText("앉은 시간 : " + sittingTime + "분\n"+ "정확도 : " + accuracy + "%"));
+
+
+
+        //상태바를 드래그하여 아래로 내리면 보이는 알림창(확장 상태바)의 아이콘 모양 지정
+        builder.setLargeIcon(BitmapFactory.decodeResource(globalContext.getResources(), R.drawable.ic_launcher));
+
+        //알림에 사운드 기능 추가
+        Uri soundUri= RingtoneManager.getActualDefaultRingtoneUri(globalContext, RingtoneManager.TYPE_NOTIFICATION);
+        builder.setSound(soundUri);
+
+        Notification notification= builder.build();    //Notification 객체 생성
+        manager.notify(0, notification);    //NotificationManager가 알림(Notification)을 표시, id는 알림구분용
     }
 }
 

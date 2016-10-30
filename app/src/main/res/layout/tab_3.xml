@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10">
-
+   <Space
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1"/>
    <ImageView
        android:id="@+id/position"
        android:layout_width="match_parent"
        android:layout_height="0dp"
-       android:layout_weight="1"
-       android:text="자세는 이러이러하다"
-       android:textSize="20pt"/>
+       android:layout_weight="8"/>
    <TextView
        android:id="@+id/position2"
        android:layout_width="match_parent"

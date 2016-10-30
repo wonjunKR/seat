@@ -28,6 +28,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'   // 원래 0.0
+    //compile 'com.android.support:appcompat-v7:25.0.0'
     compile 'com.squareup.okhttp3:okhttp:3.2.0' // http 요청
     compile 'com.facebook.android:facebook-android-sdk:4.+' // 페북 연동
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6' // 그래프 위해서 추가

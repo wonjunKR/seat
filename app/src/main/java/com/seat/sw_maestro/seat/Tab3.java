@@ -75,22 +75,37 @@ public class Tab3 extends Fragment {
                         해당 탭이 이동될 때 바인드가 정상적으로 바뀌어야함.
                         그런데 지금 탭3 -> 탭2 -> 탭1로 가는 경우에는 정상적으로 안되는 상황이 발생함. - 해결필요
                      */
+
                     position2.setText(msg.obj.toString() + "번 자세입니다");
                     switch(msg.obj.toString()){
                         case "0":
-                            position2.setText("정자세입니다");
+                            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_good));
+                            position2.setText("정자세");
                             break;
                         case "1":
-                            position2.setText("왼쪽으로쏠림");
+                            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_left));
+                            position2.setText("왼쪽쏠림");
                             break;
                         case "2":
-                            position2.setText("오른쪽으로쏠림");
+                            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_right));
+                            position2.setText("오른쪽쏠림");
                             break;
                         case "3":
-                            position2.setText("오른쪽다리를 꼼");
+                            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_front));
+                            position2.setText("앞으로쏠림");
                             break;
                         case "4":
-                            position2.setText("왼쪽다리를 꼼");
+                            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_back));
+                            position2.setText("뒤로쏠림");
+                            break;
+                        case "5":
+                            position2.setText("엉덩이 앞으로 뺌");
+                            break;
+                        case "6":
+                            position2.setText("왼쪽으로 다리 꼼");
+                            break;
+                        case "7":
+                            position2.setText("오른쪽으로 다리 꼼");
                             break;
                     }
 
@@ -197,22 +212,4 @@ public class Tab3 extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
     }
-
-    public void setPosition(){
-
-        position2.setText("할루");
-
-
-        int position_number = 1;
-
-        if(position_number != 0) {
-            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_left));
-            position_number = 1;
-        }else if(position_number == 1){
-            position.setImageDrawable(getResources().getDrawable(R.drawable.status_realtime_left));
-            position_number = 0;
-        }
-    }
-
-
 }

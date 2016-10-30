@@ -56,6 +56,14 @@ public class BluetoothService extends Service {
     Perceptron perceptron3;
     Perceptron perceptron4;
 
+    Centroid centroid0;
+    Centroid centroid1;
+    Centroid centroid2;
+    Centroid centroid3;
+    Centroid centroid4;
+    Centroid centroid5;
+
+
     // 생성자
     BluetoothService(){
 
@@ -137,8 +145,8 @@ public class BluetoothService extends Service {
             // 자세의 결과를 보내준다.
             TimerTask timerTask_Tab3 = new TimerTask() {
                 public void run() {
-                    Log.d(TAG, "TimerTask_Tab3 실행 됨");
-                    Log.d(TAG, "현재 상태 : " + serviceState);
+                    //Log.d(TAG, "TimerTask_Tab3 실행 됨");
+                    //Log.d(TAG, "현재 상태 : " + serviceState);
                 }
             };
 
@@ -170,8 +178,9 @@ public class BluetoothService extends Service {
                     timer = new Timer();
                     timer.schedule(timerTask_Tab3, 1000, 1000); // Tab3전용 task를 1초 후 1초마다 실행
 
-                    Log.d(TAG, "리스너를 등록한다");
-                    // 블루투스 리스너
+                    Log.d(TAG, "실시간용 리스너를 등록한다.");
+
+                    // 블루투스 리스너 실시간용
                     bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
                         public void onDataReceived(byte[] data, String message) {
                             // Do something when data incoming
@@ -180,31 +189,10 @@ public class BluetoothService extends Service {
                             //Toast.makeText(getApplicationContext(), "데이터를 받았다.", Toast.LENGTH_SHORT).show();
                             //bt.send("1",true);
 
-
-                            String[] input_string = new String[9];
+                            String[] input_string = new String[11];
                             input_string = message.split(",");
 
-                            int[] input_int = new int[9];
-                            float[] input_float = new float[9];
-                            for(int i = 0; i < 9; i++){
-                                input_int[i] = Integer.parseInt(input_string[i]);
-                                input_float[i] = ((float)input_int[i]/(float)100);
-                            }
-
-                            float[] positionProbability = new float[5];
-                            positionProbability[0] = perceptron0.feedforward(input_float);
-                            positionProbability[1] = perceptron1.feedforward(input_float);
-                            positionProbability[2] = perceptron2.feedforward(input_float);
-                            positionProbability[3] = perceptron3.feedforward(input_float);
-                            positionProbability[4] = perceptron4.feedforward(input_float);
-
-                            Log.d(TAG, "0번 자세 확률 : " + positionProbability[0]);
-                            Log.d(TAG, "1번 자세 확률 : " + positionProbability[1]);
-                            Log.d(TAG, "2번 자세 확률 : " + positionProbability[2]);
-                            Log.d(TAG, "3번 자세 확률 : " + positionProbability[3]);
-                            Log.d(TAG, "4번 자세 확률 : " + positionProbability[4]);
-
-                            int positionResult = getMax(positionProbability);
+                            int positionResult = guessPosition(input_string);   // 자세 결과 추측
 
                             if (bt != null && bt.getServiceState() == 3)   // 3이면 블루투스에서 연결상태임
                                 remoteSendMessage_Tab3(String.valueOf(positionResult)); // 자세의 결과를 보냄
@@ -320,6 +308,13 @@ public class BluetoothService extends Service {
         perceptron4.weights[7] = (float) -0.5655;
         perceptron4.weights[8] = (float) 1.9782;
 
+        centroid0 = new Centroid(0.79255102,-1.647755102); // 정자세
+        centroid1 = new Centroid(-2.389793814,-0.439484536);   // 왼쪽
+        centroid2 = new Centroid(1.8,-3.3);    // 오른쪽
+        centroid3 = new Centroid(0.194646465,-1.044747475); // 앞으로 쏠
+        centroid4 = new Centroid(0.922626263,-1.468989899); // 뒤로 쏠
+        centroid5 = new Centroid(0.2966,4.2344); // 엉덩이 앞으로 뺌
+
         bt = new BluetoothSPP(getApplicationContext());
 
         // 자동연결부분
@@ -410,9 +405,9 @@ public class BluetoothService extends Service {
         // 24 * 60 * 60 * 1000 -> 하루 24시간, 60분, 60초
     }
 
-    public int getMax(float[] input){
+    public int getMaxIndex(double[] input){
         int maxIndex = 0;
-        float max = 0;
+        double max = 0;
 
         for(int i = 0; i < input.length; i++){
             if(input[i] > max){ // 여러개 인풋 중에서 가장 컸던 부분의 인덱스를 리턴한다. input[0]~[5] -> 0~5 리턴
@@ -421,5 +416,63 @@ public class BluetoothService extends Service {
             }
         }
         return maxIndex;
+    }
+
+    public int getMinIndex(double[] input){
+        int minIndex = 0;
+        double min = 999999;
+
+        for(int i = 0;i < input.length; i++){
+            if(input[i] < min){
+                min = input[i];
+                minIndex = i;
+            }
+        }
+        return minIndex;
+    }
+
+    public int guessPosition(String[] input_string){
+        // 블루투스로 오는 정보는 0~8번은 셀 값, 9~10번은 좌표가 들어온다.
+
+        int[] input_int = new int[9];
+        float[] input_float = new float[2];    // string을 float로
+
+        // 셀 값
+        for(int i = 0; i < 9; i++){
+            input_int[i] = Integer.parseInt(input_string[i]);
+        }
+
+        // k-means 관련(좌표)
+        input_float[0] = Float.valueOf(input_string[9])/100;
+        input_float[1] = Float.valueOf(input_string[10])/100;
+
+        Log.d(TAG, "(" + input_float[0] + " , " + input_float[1] + ")");
+
+        // k-means
+        double[] positionProbability = new double[6];
+        positionProbability[0] = centroid0.getDistance(input_float[0],input_float[1]);  // 정자세
+        positionProbability[1] = centroid1.getDistance(input_float[0],input_float[1]);  // 왼쪽
+        positionProbability[2] = centroid2.getDistance(input_float[0],input_float[1]);  // 오른쪽
+        positionProbability[3] = centroid3.getDistance(input_float[0],input_float[1]);  // 상체 앞으로
+        positionProbability[4] = centroid4.getDistance(input_float[0],input_float[1]);  // 상체 뒤로
+        positionProbability[5] = centroid5.getDistance(input_float[0],input_float[1]);  // 엉덩이 앞으로
+
+        Log.d(TAG,"정자세" + positionProbability[0]);
+        Log.d(TAG,"왼쪽" + positionProbability[1]);
+        Log.d(TAG,"오른쪽" + positionProbability[2]);
+        Log.d(TAG,"상체앞" + positionProbability[3]);
+        Log.d(TAG,"상체뒤" + positionProbability[4]);
+        Log.d(TAG,"엉덩이 앞" + positionProbability[5]);
+
+
+        int positionResult = getMinIndex(positionProbability);
+
+        if(positionResult == 1 && input_int[2] <= 5){   // 왼쪽으로 쏠린 자세인데, 오른쪽 앞 부분이 안눌렸다 -> 다리를 꼬았음
+            return 6;
+        }else if(positionResult == 2 && input_int[0] <= 5){ // 오른쪽으로 쏠린 자세인데, 왼쪽 앞 부분이 비었다 -> 다리를 꼬았음
+            return 7;
+        }else {
+            return positionResult;
+        }
     }
 }
